@@ -1,0 +1,9 @@
+# compilation result
+*.out
+*.exe
+
+# Mac OS specific files
+.DS_Store
+
+# VS Code specific files
+.vscode/
