@@ -5,4 +5,4 @@ build:
 	 model/base/file.cpp\
 	 model/file-types/ordinary_file.cpp\
 	 model/file-types/directory.cpp\
-	 model/file-types/symbolic_link.cpp\
+	 file-management/file_factory.cpp\
