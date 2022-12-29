@@ -16,16 +16,24 @@ Directory::~Directory()
     subFiles.clear();
 }
 
-void Directory::createDirectory(const std::string &name)
+void Directory::addFile(File *file)
 {
-}
+    // guard for nullptr
+    if (!file)
+    {
+        return;
+    }
 
-void Directory::createOrdinaryFile(const std::string &name)
-{
-}
+    // guard for existing file
+    for (int i = 0; i < subFiles.size(); i++)
+    {
+        if (subFiles[i]->getName() == file->getName())
+        {
+            return;
+        }
+    }
 
-void Directory::createSymbolicLink(const std::string &name)
-{
+    subFiles.push_back(file);
 }
 
 void Directory::removeFile(const std::string &name)
@@ -34,6 +42,11 @@ void Directory::removeFile(const std::string &name)
 
 void Directory::removeDirectory(const std::string &name)
 {
+}
+
+Directory *Directory::getParent() const
+{
+    return parent;
 }
 
 void Directory::getContent() const

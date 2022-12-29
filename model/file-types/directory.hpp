@@ -8,16 +8,17 @@ private:
     Directory *parent;
     std::vector<File *> subFiles;
 
+    friend class DirectoryUtils;
+
 public:
     Directory(const std::string &name, Directory *parent);
     ~Directory();
 
-    void createOrdinaryFile(const std::string &name);
-    void createDirectory(const std::string &name);
-    void createSymbolicLink(const std::string &name);
+    void addFile(File* file);
 
     void removeFile(const std::string &name);
     void removeDirectory(const std::string &name);
 
+    Directory * getParent() const;
     virtual void getContent() const;
 };
