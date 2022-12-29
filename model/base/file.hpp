@@ -9,7 +9,7 @@ protected:
     MetaData metaData;
 
     File(const std::string &name, FileType fileType);
-    
+    File(const File &other);
 public:
     const std::string getName() const;
     const MetaData getMetaData() const;

@@ -6,12 +6,13 @@
 class SymbolicLink : public File
 {
 private:
-    Directory* parent;
+    Directory *parent;
     std::string filePath;
 
 public:
-    SymbolicLink(const std::string &name, Directory *parent, const std::string &filePath);
-
+    SymbolicLink(const std::string &name, const std::string &filePath, Directory *Parent);
+    SymbolicLink(const SymbolicLink &other, Directory *parent = nullptr);
     void changeLink(const std::string &newPath);
+    Directory *getParent() const;
     virtual void getContent() const;
 };
