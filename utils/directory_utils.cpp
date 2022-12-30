@@ -97,6 +97,12 @@ Directory *DirectoryUtils::find(Directory *startingDirectory, const std::string 
             currentDirectory = goUpTheHierarchy(currentDirectory);
             continue;
         }
+
+        if (pathSegments[i] == ".")
+        {
+            continue;
+        }
+        
         currentDirectory = goDownTheHierarchy(currentDirectory, pathSegments[i]);
 
         // if current is null directory does not exist
