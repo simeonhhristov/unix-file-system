@@ -6,6 +6,11 @@
 
 class DirectoryUtils
 {
+private:
+    Directory *goUpTheHierarchy(Directory *directory) const;
+    Directory *goDownTheHierarchy(Directory *directory, const std::string &nextDirectoryName) const;
+    Directory *goToRoot(Directory * directory) const;
 public:
-    std::string &getFullPath(Directory *directory);
+    std::string &getFullPath(Directory *directory) const;
+    Directory *find(Directory* startingDirectory, const std::string &path) const;
 };

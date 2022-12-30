@@ -11,7 +11,7 @@ class FileService
 private:
     FileRepository *repository;
     Directory *currentDirectory;
-    DirectoryUtils *directoryUtils;
+    DirectoryUtils directoryUtils;
 
 public:
     FileService(FileRepository *repository, Directory *root);
@@ -20,14 +20,14 @@ public:
     FileService &operator=(const FileService &other) = delete;
     ~FileService();
 
-    std::string getWorkingDirectory();                   // pwd
-    Directory *changeDirectory(const std::string &path); // cd
-    std::vector<Directory *> listItems();                // ls
-    void concatenate();                                  // cat
-    void copyFiles();                                    // cp
-    void removeFiles();                                  // rm
-    void makeDirectory();                                // mkdir
-    void removeDirectory();                              // rmdir
-    void makeSymbolicLink();                             // ln
-    std::string getStat();                               // stat
+    std::string getWorkingDirectory() const;                           // pwd
+    Directory *changeDirectory(const std::string &path);               // cd
+    std::vector<std::string> listItems(const std::string &path) const; // ls
+    void concatenate();                                                // cat
+    void copyFiles();                                                  // cp
+    void removeFiles();                                                // rm
+    void makeDirectory();                                              // mkdir
+    void removeDirectory();                                            // rmdir
+    void makeSymbolicLink();                                           // ln
+    std::string getStat();                                             // stat
 };

@@ -6,25 +6,32 @@ FileService::FileService(FileRepository *repository, Directory *root)
 {  
     this->repository = repository;
     this->currentDirectory = root;
-    directoryUtils = new DirectoryUtils();
+    directoryUtils = DirectoryUtils();
 }
 
 FileService::~FileService() 
 {  
     delete repository;
     delete currentDirectory;
-    delete directoryUtils;
 }
 
-std::string FileService::getWorkingDirectory() 
+std::string FileService::getWorkingDirectory() const
 {
-    directoryUtils->getFullPath(currentDirectory);
+    return directoryUtils.getFullPath(currentDirectory);
 }
 
 Directory *FileService::changeDirectory(const std::string &path) 
-{}
+{
+    Directory * result = directoryUtils.find(currentDirectory, path);
+    if (result)
+    {
+        currentDirectory = result;
+    }
+    
+    return result;
+}
 
-std::vector<Directory *> FileService::listItems() 
+std::vector<std::string> FileService::listItems(const std::string &path) const
 {}
 
 void FileService::concatenate() 
