@@ -68,6 +68,27 @@ void FileService::removeDirectory()
 void FileService::makeSymbolicLink()
 {
 }
-std::string FileService::getStat()
+
+std::string FileService::getStat(const std::string &path) const
 {
+    File* target = directoryUtils.findFile(currentDirectory, path);
+    if (!target)
+    {
+        target = directoryUtils.findDirectory(currentDirectory, path);
+    }
+    if (!target)
+    {
+        throw std::invalid_argument("No such file or directory");
+    }
+    
+    MetaData data = target->getMetaData();
+    std::string result;
+    
+    result += std::to_string(data.fileSize) + " ";
+    // result += printFileType(data.fileType) + " ";
+    result += std::to_string(data.lastAccessDate) + " ";
+    result += std::to_string(data.lastMetaDataModificationDate) + " ";
+    result += std::to_string(data.serialNumber);
+    
+    return result;
 }

@@ -1,4 +1,5 @@
-enum class FileType {
+enum class FileType
+{
     File,
     Directory,
     Symlink

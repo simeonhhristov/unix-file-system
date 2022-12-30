@@ -20,14 +20,14 @@ public:
     FileService &operator=(const FileService &other) = delete;
     ~FileService();
 
-    std::string getWorkingDirectory() const;                           // pwd
-    Directory *changeDirectory(const std::string &path);               // cd
+    std::string getWorkingDirectory() const;                                 // pwd
+    Directory *changeDirectory(const std::string &path);                     // cd
     std::vector<std::string> getContentsList(const std::string &path) const; // ls
-    void concatenate();                                                // cat
-    void copyFiles();                                                  // cp
-    void removeFiles();                                                // rm
-    void makeDirectory();                                              // mkdir
-    void removeDirectory();                                            // rmdir
-    void makeSymbolicLink();                                           // ln
-    std::string getStat();                                             // stat
+    void concatenate();                                                      // cat
+    void copyFiles();                                                        // cp
+    void removeFiles();                                                      // rm
+    void makeDirectory();                                                    // mkdir
+    void removeDirectory();                                                  // rmdir
+    void makeSymbolicLink();                                                 // ln
+    std::string getStat(const std::string &path) const;                            // stat
 };
