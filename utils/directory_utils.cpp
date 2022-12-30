@@ -1,6 +1,44 @@
 #include "directory_utils.hpp"
 #include "string_utils.hpp"
 
+Directory *DirectoryUtils::traverseDirectories(Directory *startingDirectory, std::vector<std::string> &pathSegments) const
+{
+    Directory *currentDirectory = startingDirectory;
+    int startIdx = 0;
+
+    // check for absolute path
+    if (!pathSegments.empty() &&
+        pathSegments[0] == "")
+    {
+        currentDirectory = goToRoot(currentDirectory);
+        startIdx = 1;
+    }
+
+    for (int i = startIdx; i < pathSegments.size(); i++)
+    {
+        if (pathSegments[i] == "..")
+        {
+            currentDirectory = goUpTheHierarchy(currentDirectory);
+            continue;
+        }
+
+        if (pathSegments[i] == ".")
+        {
+            continue;
+        }
+
+        currentDirectory = goDownTheHierarchy(currentDirectory, pathSegments[i]);
+
+        // if current is null directory does not exist
+        if (!currentDirectory)
+        {
+            break;
+        }
+    }
+
+    return currentDirectory;
+}
+
 Directory *DirectoryUtils::goUpTheHierarchy(Directory *directory) const
 {
     // guard for nullptr
@@ -74,43 +112,55 @@ std::string &DirectoryUtils::getFullPath(Directory *directory) const
     return *result;
 }
 
-Directory *DirectoryUtils::find(Directory *startingDirectory, const std::string &path) const
+Directory *DirectoryUtils::findDirectory(Directory *startingDirectory, const std::string &path) const
 {
     StringUtils stringUtils = StringUtils();
     std::vector<std::string> pathSegments = stringUtils.segmentString(path, '/');
 
-    Directory *currentDirectory = startingDirectory;
-    int startIdx = 0;
+    return traverseDirectories(startingDirectory, pathSegments);
+}
 
-    // check for absolute path
-    if (!pathSegments.empty() &&
-        pathSegments[0] == "")
+File *DirectoryUtils::findFile(Directory *startingDirectory, const std::string &path) const
+{
+    StringUtils stringUtils = StringUtils();
+    std::vector<std::string> pathSegments = stringUtils.segmentString(path, '/');
+    std::string fileName;
+
+    // extract file name from path segments
+    fileName = pathSegments[pathSegments.size() - 1];
+    pathSegments.pop_back();
+
+    Directory *fileLocation = traverseDirectories(startingDirectory, pathSegments);
+    if (!fileLocation)
     {
-        currentDirectory = goToRoot(currentDirectory);
-        startIdx = 1;
+        return nullptr;
     }
 
-    for (int i = startIdx; i < pathSegments.size(); i++)
+    // search for file in directory
+    std::vector<File *> subFiles = fileLocation->getSubFiles();
+    for (size_t i = 0; i < subFiles.size(); i++)
     {
-        if (pathSegments[i] == "..")
+        if (subFiles[i]->getName() == fileName)
         {
-            currentDirectory = goUpTheHierarchy(currentDirectory);
-            continue;
-        }
-
-        if (pathSegments[i] == ".")
-        {
-            continue;
-        }
-        
-        currentDirectory = goDownTheHierarchy(currentDirectory, pathSegments[i]);
-
-        // if current is null directory does not exist
-        if (!currentDirectory)
-        {
-            break;
+            // return file pointer in coresponding type
+            switch (subFiles[i]->getMetaData().fileType)
+            {
+            case FileType::File:
+            {
+                OrdinaryFile *result = dynamic_cast<OrdinaryFile *>(subFiles[i]);
+                return result;
+            }
+            case FileType::Symlink:
+            {
+                SymbolicLink *result = dynamic_cast<SymbolicLink *>(subFiles[i]);
+                return result;
+            }
+            case FileType::Directory:
+            {
+                return nullptr;
+            }
+            }
         }
     }
-
-    return currentDirectory;
+    return nullptr;
 }

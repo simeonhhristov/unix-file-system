@@ -22,7 +22,7 @@ std::string FileService::getWorkingDirectory() const
 
 Directory *FileService::changeDirectory(const std::string &path)
 {
-    Directory *result = directoryUtils.find(currentDirectory, path);
+    Directory *result = directoryUtils.findDirectory(currentDirectory, path);
     if (result)
     {
         currentDirectory = result;
@@ -33,7 +33,7 @@ Directory *FileService::changeDirectory(const std::string &path)
 
 std::vector<std::string> FileService::getContentsList(const std::string &path) const
 {
-    Directory *target = directoryUtils.find(currentDirectory, path);
+    Directory *target = directoryUtils.findDirectory(currentDirectory, path);
     std::vector<std::string> result;
 
     if (!target)
