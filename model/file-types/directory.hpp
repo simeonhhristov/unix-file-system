@@ -19,6 +19,7 @@ public:
 
     void removeFile(const std::string &name);
     void removeDirectory(const std::string &name);
+    const std::vector<File *> &getSubFiles() const;
 
     Directory * getParent() const;
     virtual void getContent() const;

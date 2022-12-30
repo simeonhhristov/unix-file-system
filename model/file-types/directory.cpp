@@ -17,7 +17,7 @@ Directory::Directory(const Directory &other, Directory *parent) : File(other)
 {
     this->parent = parent == nullptr ? other.parent : parent;
     name = parent == nullptr ? name : other.name;
-    
+
     for (int i = 0; i < other.subFiles.size(); i++)
     {
         switch (other.subFiles[i]->getMetaData().fileType)
@@ -83,6 +83,10 @@ void Directory::removeDirectory(const std::string &name)
 Directory *Directory::getParent() const
 {
     return parent;
+}
+
+const std::vector<File *> &Directory::getSubFiles() const {
+    return subFiles;
 }
 
 void Directory::getContent() const
