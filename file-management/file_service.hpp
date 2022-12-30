@@ -22,7 +22,7 @@ public:
 
     std::string getWorkingDirectory() const;                           // pwd
     Directory *changeDirectory(const std::string &path);               // cd
-    std::vector<std::string> listItems(const std::string &path) const; // ls
+    std::vector<std::string> getContentsList(const std::string &path) const; // ls
     void concatenate();                                                // cat
     void copyFiles();                                                  // cp
     void removeFiles();                                                // rm

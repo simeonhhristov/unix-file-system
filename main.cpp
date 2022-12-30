@@ -21,7 +21,11 @@ int main()
     FileService * fileService = new FileService(fileRepo, dir1);
 
     std::cout << fileService->getWorkingDirectory() << "\n";
-    fileService->changeDirectory("  child1  ");
-    std::cout << fileService->getWorkingDirectory() << "\n";
+    std::vector<std::string> result = fileService->listItems("/child");
+    for (size_t i = 0; i < result.size(); i++)
+    {
+        std::cout << result[i] << " ";
+    }
+
     //std::cout << util.getFullPath(dir3); --done
 }
