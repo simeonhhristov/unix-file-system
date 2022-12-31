@@ -50,9 +50,14 @@ std::vector<std::string> FileService::getContentsList(const std::string &path) c
     return result;
 }
 
-void FileService::concatenate()
+void FileService::concatenate(const std::vector<std::string> &filePaths, const std::string &destinationFile)
 {
 }
+
+void FileService::concatenate(const std::string &content, const std::string &destinationFile)
+{
+}
+
 void FileService::copyFiles()
 {
 }
@@ -71,11 +76,7 @@ void FileService::makeSymbolicLink()
 
 std::string FileService::getStat(const std::string &path) const
 {
-    File* target = directoryUtils.findFile(currentDirectory, path);
-    if (!target)
-    {
-        target = directoryUtils.findDirectory(currentDirectory, path);
-    }
+    File* target = repository->find(currentDirectory, path);
     if (!target)
     {
         throw std::invalid_argument("No such file or directory");

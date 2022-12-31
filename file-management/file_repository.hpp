@@ -7,18 +7,18 @@
 class FileRepository
 {
 private:
-    Directory* root;
+    Directory *root;
     FileFactory fileFactory;
 
 public:
     FileRepository();
     FileRepository(const FileRepository &other) = delete;
-    FileRepository& operator=(const FileFactory &other) = delete;
+    FileRepository &operator=(const FileFactory &other) = delete;
     FileRepository(Directory *root);
     ~FileRepository();
 
-    void add(File* file, const std::string filePath);
-    bool fileExists(const std::string& filePath);
+    void add(File *file, const std::string filePath);
+    File *find(Directory *startingDirectory, const std::string &filePath);
     void remove(const std::string filePath);
     Directory *getRoot();
 };

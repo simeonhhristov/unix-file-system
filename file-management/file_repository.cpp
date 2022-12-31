@@ -1,8 +1,9 @@
 #include "file_repository.hpp"
+#include "../utils/directory_utils.hpp"
 
 FileRepository::FileRepository()
 {
-    this->root = new Directory("~", nullptr);
+    this->root = new Directory("", nullptr);
     fileFactory = FileFactory();
 }
 
@@ -25,8 +26,8 @@ void FileRepository::add(File *file, const std::string filePath)
         throw std::invalid_argument("Null pointer as file reference");
     }
 
-    //guard for existing file
-    if (fileExists(filePath))
+    // guard for existing file
+    if (find(nullptr, filePath))
     {
         throw std::invalid_argument("File already exists");
     }
@@ -34,23 +35,31 @@ void FileRepository::add(File *file, const std::string filePath)
     // traverse file path and create directories till the end
 }
 
-bool FileRepository::fileExists(const std::string &filePath)
+File *FileRepository::find(Directory *startingDirectory, const std::string &filePath)
 {
-    if (filePath.size() == 0) {
-        return false;
+    if (filePath.size() == 0)
+    {
+        return nullptr;
     }
 
-    // traverse from root till invalid file or existing file
+    DirectoryUtils directoryUtils = DirectoryUtils();
+    File *target = directoryUtils.findFile(startingDirectory, filePath);
+    if (!target)
+    {
+        target = directoryUtils.findDirectory(startingDirectory, filePath);
+    }
+    return target;
 }
 
 void FileRepository::remove(const std::string filePath)
 {
-    if (!fileExists(filePath)) {
+    if (!find(nullptr, filePath))
+    {
         throw std::invalid_argument("File does not exist");
     }
 
-    //traverse from root till the end
-    //delete file
+    // traverse from root till the end
+    // delete file
 }
 
 Directory *FileRepository::getRoot()

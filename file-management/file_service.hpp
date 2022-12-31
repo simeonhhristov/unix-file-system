@@ -20,14 +20,15 @@ public:
     FileService &operator=(const FileService &other) = delete;
     ~FileService();
 
-    std::string getWorkingDirectory() const;                                 // pwd
-    Directory *changeDirectory(const std::string &path);                     // cd
-    std::vector<std::string> getContentsList(const std::string &path) const; // ls
-    void concatenate();                                                      // cat
-    void copyFiles();                                                        // cp
-    void removeFiles();                                                      // rm
-    void makeDirectory();                                                    // mkdir
-    void removeDirectory();                                                  // rmdir
-    void makeSymbolicLink();                                                 // ln
-    std::string getStat(const std::string &path) const;                            // stat
+    std::string getWorkingDirectory() const;                                                         // pwd
+    Directory *changeDirectory(const std::string &path);                                             // cd
+    std::vector<std::string> getContentsList(const std::string &path) const;                         // ls
+    void concatenate(const std::vector<std::string> &filePaths, const std::string &destinationFile); // cat
+    void concatenate(const std::string &content, const std::string &destinationFile);                // cat
+    void copyFiles();                                                                                // cp
+    void removeFiles();                                                                              // rm
+    void makeDirectory();                                                                            // mkdir
+    void removeDirectory();                                                                          // rmdir
+    void makeSymbolicLink();                                                                         // ln
+    std::string getStat(const std::string &path) const;                                              // stat
 };
