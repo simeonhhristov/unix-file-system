@@ -39,6 +39,44 @@ Directory *DirectoryUtils::traverseDirectories(Directory *startingDirectory, std
     return currentDirectory;
 }
 
+Directory *DirectoryUtils::traverseAndCreateDirectories(Directory *startingDirectory, std::vector<std::string> &pathSegments) const
+{
+    Directory *currentDirectory = startingDirectory;
+    int startIdx = 0;
+
+    // check for absolute path
+    if (!pathSegments.empty() &&
+        pathSegments[0] == "")
+    {
+        currentDirectory = goToRoot(currentDirectory);
+        startIdx = 1;
+    }
+
+    FileFactory factory = FileFactory();
+    for (int i = startIdx; i < pathSegments.size(); i++)
+    {
+        if (pathSegments[i] == "..")
+        {
+            currentDirectory = goUpTheHierarchy(currentDirectory);
+            continue;
+        }
+        if (pathSegments[i] == ".")
+        {
+            continue;
+        }
+
+        Directory *nextDirectory = goDownTheHierarchy(currentDirectory, pathSegments[i]);
+
+        // if current is null create it
+        if (!nextDirectory)
+        {
+            nextDirectory = factory.createDirectory(pathSegments[i], currentDirectory);
+        }
+        currentDirectory = nextDirectory;
+    }
+    return currentDirectory;
+}
+
 Directory *DirectoryUtils::goUpTheHierarchy(Directory *directory) const
 {
     // guard for nullptr
@@ -157,10 +195,58 @@ File *DirectoryUtils::findFile(Directory *startingDirectory, const std::string &
             }
             case FileType::Directory:
             {
-                return nullptr;
+                Directory *result = dynamic_cast<Directory *>(subFiles[i]);
+                return result;
             }
             }
         }
     }
     return nullptr;
+}
+
+void DirectoryUtils::createDirectory(Directory *startingDirectory, const std::string &path) const
+{
+    StringUtils stringUtils = StringUtils();
+    std::vector<std::string> pathSegments = stringUtils.segmentString(path, '/');
+    Directory *target = traverseDirectories(startingDirectory, pathSegments);
+    if (target)
+    {
+        throw std::invalid_argument("Directory already exists");
+    }
+    traverseAndCreateDirectories(startingDirectory, pathSegments);
+}
+
+void DirectoryUtils::createFile(Directory *startingDirectory, const std::string &path, const std::string &data, FileType fileType) const
+{
+    StringUtils stringUtils = StringUtils();
+    std::vector<std::string> pathSegments = stringUtils.segmentString(path, '/');
+    std::string fileName;
+
+    // extract file name from path segments
+    fileName = pathSegments[pathSegments.size() - 1];
+    pathSegments.pop_back();
+
+    Directory *fileLocation = traverseAndCreateDirectories(startingDirectory, pathSegments);
+    File *target = findFile(fileLocation, fileName);
+    if (target)
+    {
+        throw std::invalid_argument("File already exists");
+    }
+     
+    FileFactory factory = FileFactory();
+    switch (fileType)
+    {
+    case FileType::File:
+    {
+        factory.createOrdinaryFile(fileName, data, fileLocation);
+        break;
+    }
+    case FileType::Symlink:
+    {
+        factory.createSymbolicLink(fileName, data, fileLocation);
+        break;
+    }
+    case FileType::Directory:
+        break;
+    }
 }
