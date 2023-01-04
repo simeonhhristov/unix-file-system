@@ -75,12 +75,38 @@ void FileService::makeDirectory(const std::string &filePath)
     {
         throw std::invalid_argument("Invalid path specified");
     }
-    
+
     repository->addDirectory(currentDirectory, filePath);
 }
 
-void FileService::removeDirectory()
+void FileService::removeDirectory(const std::string &filePath)
 {
+    //can't delete file that doesnt exist
+    File *target = repository->find(currentDirectory, filePath);
+    if (!target)
+    {
+        throw std::invalid_argument("Directory does not exist");
+    }
+
+    //can't delete file which is not a directory
+    Directory *targetDirectory = dynamic_cast<Directory *>(target);
+    if (!targetDirectory) 
+    {
+        throw std::invalid_argument("Specified file is not a directory");
+    }
+
+    //can't delete current directory
+    if (currentDirectory == targetDirectory)
+    {
+        throw std::invalid_argument("Invalid argument");
+    }
+
+    if (targetDirectory->getSubFiles().size() > 0)
+    {
+        throw std::invalid_argument("Directory is not empty");
+    }
+
+    delete targetDirectory;
 }
 void FileService::makeSymbolicLink(const std::string &filePath, const std::string &linkPath)
 {

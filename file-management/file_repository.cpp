@@ -39,6 +39,10 @@ File *FileRepository::find(Directory *startingDirectory, const std::string &file
 
     DirectoryUtils directoryUtils = DirectoryUtils();
     File *target = directoryUtils.findFile(startingDirectory, filePath);
+    if (!target)
+    {
+        target = directoryUtils.findDirectory(startingDirectory, filePath);
+    }
     return target;
 }
 

@@ -27,8 +27,9 @@ int main()
     FileService *fileService = new FileService(fileRepo, dir1);
     DirectoryUtils dirUtil = DirectoryUtils();
 
-    std::cout << fileService->changeDirectory("newDir") << " \n";
     fileService->changeDirectory("child1");
-    fileService->makeDirectory("");
-    std::cout << fileService->changeDirectory("newDir");
+    fileService->makeDirectory("testDelete");
+    // std::cout << fileService->changeDirectory("testDelete");
+    fileService->removeDirectory("testDelete");
+    std::cout << fileService->changeDirectory("testDelete");
 }

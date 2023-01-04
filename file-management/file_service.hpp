@@ -28,7 +28,7 @@ public:
     void copyFiles();                                                                                // cp
     void removeFiles();                                                                              // rm
     void makeDirectory(const std::string &filePath);                                                 // mkdir
-    void removeDirectory();                                                                          // rmdir
+    void removeDirectory(const std::string &filePath);                                               // rmdir
     void makeSymbolicLink(const std::string &filePath, const std::string &linkPath);                 // ln
     std::string getStat(const std::string &path) const;                                              // stat
 };
