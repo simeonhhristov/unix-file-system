@@ -30,6 +30,9 @@ int main()
     fileService->changeDirectory("child1");
     fileService->makeDirectory("testDelete");
     // std::cout << fileService->changeDirectory("testDelete");
-    fileService->removeDirectory("testDelete");
-    std::cout << fileService->changeDirectory("testDelete");
+    std::cout << fileService->changeDirectory("./")->getSubFiles().size()<< "\n";
+    std::cout << link1->getName()<< "\n";
+    fileService->removeFile("link1");
+    std::cout << fileService->changeDirectory("./")->getSubFiles().size()<< "\n";
+    std::cout << link1<< "\n";
 }

@@ -74,10 +74,14 @@ void Directory::addFile(File *file)
 
 void Directory::removeFile(const std::string &name)
 {
-}
-
-void Directory::removeDirectory(const std::string &name)
-{
+    for (int i = 0; i < subFiles.size(); i++)
+    {
+        if (name == subFiles[i]->getName())
+        {
+            subFiles.erase(subFiles.begin() + i);
+            break;
+        }
+    }
 }
 
 Directory *Directory::getParent() const

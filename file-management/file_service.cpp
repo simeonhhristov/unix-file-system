@@ -65,8 +65,25 @@ void FileService::concatenate(const std::string &content, const std::string &des
 void FileService::copyFiles()
 {
 }
-void FileService::removeFiles()
+void FileService::removeFile(const std::string &filePath)
 {
+    //can't delete file that doesnt exist
+    File *target = repository->find(currentDirectory, filePath);
+    if (!target)
+    {
+        throw std::invalid_argument("File does not exist");
+    }
+
+    //guard if file is a directory
+    Directory *targetDirectory = dynamic_cast<Directory *>(target);
+    if (targetDirectory) 
+    {
+        throw std::invalid_argument("Specified file is a directory");
+    }
+
+    Directory * parentDirectory = dynamic_cast<Directory *>(target->getParent());
+    parentDirectory->removeFile(target->getName());
+    delete target;
 }
 
 void FileService::makeDirectory(const std::string &filePath)
@@ -106,6 +123,8 @@ void FileService::removeDirectory(const std::string &filePath)
         throw std::invalid_argument("Directory is not empty");
     }
 
+    Directory *parent = targetDirectory->getParent();
+    parent->removeFile(targetDirectory->getName());
     delete targetDirectory;
 }
 void FileService::makeSymbolicLink(const std::string &filePath, const std::string &linkPath)

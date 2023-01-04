@@ -26,7 +26,7 @@ public:
     void concatenate(const std::vector<std::string> &filePaths, const std::string &destinationFile); // cat
     void concatenate(const std::string &content, const std::string &destinationFile);                // cat
     void copyFiles();                                                                                // cp
-    void removeFiles();                                                                              // rm
+    void removeFile(const std::string &filePath);                                                    // rm
     void makeDirectory(const std::string &filePath);                                                 // mkdir
     void removeDirectory(const std::string &filePath);                                               // rmdir
     void makeSymbolicLink(const std::string &filePath, const std::string &linkPath);                 // ln
