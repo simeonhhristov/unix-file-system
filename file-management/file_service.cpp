@@ -52,6 +52,10 @@ std::vector<std::string> FileService::getContentsList(const std::string &path) c
 
 void FileService::concatenate(const std::vector<std::string> &filePaths, const std::string &destinationFile)
 {
+    if (repository->find(currentDirectory, destinationFile))
+    {
+        throw std::invalid_argument("Destination file already exists");
+    }
 }
 
 void FileService::concatenate(const std::string &content, const std::string &destinationFile)
@@ -64,32 +68,65 @@ void FileService::copyFiles()
 void FileService::removeFiles()
 {
 }
-void FileService::makeDirectory()
+
+void FileService::makeDirectory(const std::string &filePath)
 {
+    if (filePath.size() == 0)
+    {
+        throw std::invalid_argument("Invalid path specified");
+    }
+    
+    repository->addDirectory(currentDirectory, filePath);
 }
+
 void FileService::removeDirectory()
 {
 }
-void FileService::makeSymbolicLink()
+void FileService::makeSymbolicLink(const std::string &filePath, const std::string &linkPath)
 {
+    // std::string fileToLink = filePath;
+    // // make filePath absolute
+    // if (fileToLink[0] != '/')
+    // {
+    //     fileToLink = getWorkingDirectory() + "/" + fileToLink;
+    // }
+
+    // // check if file at linkPath exists
+    // File *linkTarget = repository->find(currentDirectory, linkPath);
+    // if (linkTarget)
+    // {
+    //     throw std::invalid_argument("Destination file already exists");
+    // }
+
+    // File * fileTarget = repository->find(currentDirectory, fileToLink);
+    // if (fileTarget && fileTarget->getMetaData().fileType == FileType::Directory)
+    // {
+    //     std::string error = filePath + " is a directory";
+    //     throw std::invalid_argument(error);
+    // }
+
+    // FileFactory factory = FileFactory();
+    // // SymbolicLink * newLink = factory.createSymbolicLink("TODO", linkPath, )
+    // // if file exists
+    // // // if exists and is dir
 }
 
 std::string FileService::getStat(const std::string &path) const
 {
-    File* target = repository->find(currentDirectory, path);
+    File *target = repository->find(currentDirectory, path);
     if (!target)
     {
         throw std::invalid_argument("No such file or directory");
     }
-    
+
     MetaData data = target->getMetaData();
     std::string result;
-    
+
     result += std::to_string(data.fileSize) + " ";
     // result += printFileType(data.fileType) + " ";
     result += std::to_string(data.lastAccessDate) + " ";
     result += std::to_string(data.lastMetaDataModificationDate) + " ";
     result += std::to_string(data.serialNumber);
-    
+
     return result;
 }

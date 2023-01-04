@@ -27,8 +27,8 @@ public:
     void concatenate(const std::string &content, const std::string &destinationFile);                // cat
     void copyFiles();                                                                                // cp
     void removeFiles();                                                                              // rm
-    void makeDirectory();                                                                            // mkdir
+    void makeDirectory(const std::string &filePath);                                                 // mkdir
     void removeDirectory();                                                                          // rmdir
-    void makeSymbolicLink();                                                                         // ln
+    void makeSymbolicLink(const std::string &filePath, const std::string &linkPath);                 // ln
     std::string getStat(const std::string &path) const;                                              // stat
 };

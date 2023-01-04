@@ -18,21 +18,16 @@ FileRepository::~FileRepository()
     delete root;
 }
 
-void FileRepository::add(File *file, const std::string filePath)
+void FileRepository::addDirectory(Directory* startingDirectory, const std::string filePath)
 {
-    // guard for nullptr
-    if (!file)
-    {
-        throw std::invalid_argument("Null pointer as file reference");
-    }
-
     // guard for existing file
-    if (find(nullptr, filePath))
+    if (find(startingDirectory, filePath))
     {
         throw std::invalid_argument("File already exists");
     }
 
-    // traverse file path and create directories till the end
+    DirectoryUtils directoryUtils = DirectoryUtils();
+    directoryUtils.createDirectory(startingDirectory, filePath);
 }
 
 File *FileRepository::find(Directory *startingDirectory, const std::string &filePath)
@@ -44,10 +39,6 @@ File *FileRepository::find(Directory *startingDirectory, const std::string &file
 
     DirectoryUtils directoryUtils = DirectoryUtils();
     File *target = directoryUtils.findFile(startingDirectory, filePath);
-    if (!target)
-    {
-        target = directoryUtils.findDirectory(startingDirectory, filePath);
-    }
     return target;
 }
 
