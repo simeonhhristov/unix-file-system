@@ -18,7 +18,7 @@ FileRepository::~FileRepository()
     delete root;
 }
 
-void FileRepository::addDirectory(Directory* startingDirectory, const std::string filePath)
+void FileRepository::addDirectory(Directory *startingDirectory, const std::string filePath)
 {
     // guard for existing file
     if (find(startingDirectory, filePath))
@@ -28,6 +28,17 @@ void FileRepository::addDirectory(Directory* startingDirectory, const std::strin
 
     DirectoryUtils directoryUtils = DirectoryUtils();
     directoryUtils.createDirectory(startingDirectory, filePath);
+}
+
+void FileRepository::addFile(Directory *startingDirectory, const std::string &data, const std::string &filePath, FileType fileType)
+{
+    if(find(startingDirectory, filePath))
+    {
+        throw std::invalid_argument("File already exists");
+    }
+
+    DirectoryUtils directoryUtils = DirectoryUtils();
+    directoryUtils.createFile(startingDirectory, filePath, data, fileType);
 }
 
 File *FileRepository::find(Directory *startingDirectory, const std::string &filePath)

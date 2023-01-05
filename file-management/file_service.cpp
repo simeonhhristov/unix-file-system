@@ -127,33 +127,33 @@ void FileService::removeDirectory(const std::string &filePath)
     parent->removeFile(targetDirectory->getName());
     delete targetDirectory;
 }
-void FileService::makeSymbolicLink(const std::string &filePath, const std::string &linkPath)
+
+void FileService::makeSymbolicLink(const std::string &targetPath, const std::string &linkLocation)
 {
-    // std::string fileToLink = filePath;
-    // // make filePath absolute
-    // if (fileToLink[0] != '/')
-    // {
-    //     fileToLink = getWorkingDirectory() + "/" + fileToLink;
-    // }
+    std::string fileToLink = targetPath;
+    // make filePath absolute
+    if (fileToLink[0] != '/')
+    {
+        //avoid double '/' at start if currentDirectory is root
+        std::string rootPath = getWorkingDirectory();
+        rootPath = (rootPath == "/" ? "" : rootPath);
+        fileToLink = rootPath + "/" + fileToLink;
+    }
 
-    // // check if file at linkPath exists
-    // File *linkTarget = repository->find(currentDirectory, linkPath);
-    // if (linkTarget)
-    // {
-    //     throw std::invalid_argument("Destination file already exists");
-    // }
+    // check if requested to link file is a directory
+    File * fileTarget = repository->find(currentDirectory, fileToLink);
+    if (fileTarget && fileTarget->getMetaData().fileType == FileType::Directory)
+    {
+        std::string error = fileTarget->getName() + " is a directory";
+        throw std::invalid_argument(error);
+    }
 
-    // File * fileTarget = repository->find(currentDirectory, fileToLink);
-    // if (fileTarget && fileTarget->getMetaData().fileType == FileType::Directory)
-    // {
-    //     std::string error = filePath + " is a directory";
-    //     throw std::invalid_argument(error);
-    // }
+    // determine name of targeted file
+    unsigned lastSlash = fileToLink.find_last_of("/");
+    std::string targetFileName = fileToLink.substr(lastSlash + 1);
 
-    // FileFactory factory = FileFactory();
-    // // SymbolicLink * newLink = factory.createSymbolicLink("TODO", linkPath, )
-    // // if file exists
-    // // // if exists and is dir
+    std::string newFilePath = linkLocation.size() == 0 ? targetFileName : linkLocation;
+    repository->addFile(currentDirectory, fileToLink, newFilePath, FileType::Symlink);
 }
 
 std::string FileService::getStat(const std::string &path) const
