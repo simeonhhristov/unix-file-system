@@ -56,15 +56,23 @@ void FileService::concatenate(const std::vector<std::string> &filePaths, const s
     {
         throw std::invalid_argument("Destination file already exists");
     }
+
+    
 }
 
-void FileService::concatenate(const std::string &content, const std::string &destinationFile)
+void FileService::createOrdinaryFile(const std::string &content, const std::string &destinationFile)
 {
+    if (destinationFile.size() == 0)
+    {
+        throw std::invalid_argument("No file name specified");
+    }
+    repository->addFile(currentDirectory, content, destinationFile, FileType::File);
 }
 
 void FileService::copyFiles()
 {
 }
+
 void FileService::removeFile(const std::string &filePath)
 {
     //can't delete file that doesnt exist

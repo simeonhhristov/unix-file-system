@@ -9,10 +9,8 @@ private:
     std::string content;
 
 public:
-    OrdinaryFile(const std::string &name, Directory *parent);
+    OrdinaryFile(const std::string &name, const std::string &content, Directory *parent);
     OrdinaryFile(const OrdinaryFile &other, Directory *parent = nullptr);
-    void appendToContent(const std::string &newData);
-    void setContent(const std::string &data);
     Directory *getParent() const;
     virtual const std::string& getContent() const;
 };

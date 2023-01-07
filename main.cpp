@@ -29,5 +29,6 @@ int main()
 
     // std::cout << fileService->getWorkingDirectory() << "\n";
     fileService->changeDirectory("child1");
-    fileService->makeSymbolicLink("file1", "asd");
+    fileService->createOrdinaryFile("content1", "child2/file1");
+    std::cout << dirUtil.findFile(dir2, "child2/file1")->getContent() << "\n";
 }

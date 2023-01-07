@@ -20,8 +20,7 @@ OrdinaryFile *FileFactory::createOrdinaryFile(const std::string &name, const std
     OrdinaryFile *newFile;
     try
     {
-        newFile = new OrdinaryFile(name, parent);
-        newFile->setContent(content);
+        newFile = new OrdinaryFile(name, content,parent);
     }
     catch (...)
     {
