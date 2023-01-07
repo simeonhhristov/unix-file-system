@@ -1,11 +1,11 @@
 #include <iostream>
-#include "model/base/file.hpp"
-#include "model/file-types/ordinary_file.hpp"
-#include "model/file-types/directory.hpp"
-#include "model/file-types/symbolic_link.hpp"
-#include "file-management/file_factory.hpp"
-#include "file-management/file_service.hpp"
-#include "utils/directory_utils.hpp"
+#include "file-system-domain/model/base/file.hpp"
+#include "file-system-domain/model/file-types/ordinary_file.hpp"
+#include "file-system-domain/model/file-types/directory.hpp"
+#include "file-system-domain/model/file-types/symbolic_link.hpp"
+#include "file-system-domain/file-management/file_factory.hpp"
+#include "file-system-domain/file-management/file_service.hpp"
+#include "file-system-domain/utils/directory_utils.hpp"
 
 int main()
 {
