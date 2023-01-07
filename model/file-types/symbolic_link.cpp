@@ -20,10 +20,10 @@ void SymbolicLink::changeLink(const std::string &newPath)
 
 Directory *SymbolicLink::getParent() const
 {
-    return this->parent;
+    return parent;
 }
 
-void SymbolicLink::getContent() const
+const std::string &SymbolicLink::getContent() const
 {
-    // show contents of file at path
+    return filePath;
 }

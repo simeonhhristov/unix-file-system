@@ -28,7 +28,7 @@ Directory *OrdinaryFile::getParent() const
     return this->parent;
 }
 
-void OrdinaryFile::getContent() const
+const std::string& OrdinaryFile::getContent() const
 {
-    // print content
+    return content;
 }

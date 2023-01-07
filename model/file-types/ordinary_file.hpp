@@ -14,5 +14,5 @@ public:
     void appendToContent(const std::string &newData);
     void setContent(const std::string &data);
     Directory *getParent() const;
-    virtual void getContent() const;
+    virtual const std::string& getContent() const;
 };

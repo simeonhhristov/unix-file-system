@@ -89,11 +89,18 @@ Directory *Directory::getParent() const
     return parent;
 }
 
-const std::vector<File *> &Directory::getSubFiles() const {
+const std::vector<File *> &Directory::getSubFiles() const
+{
     return subFiles;
 }
 
-void Directory::getContent() const
+const std::string &Directory::getContent() const
 {
-    // print names of subfiles
+    std::string result = "";
+    for (int i = 0; i < subFiles.size(); i++)
+    {
+        result += subFiles[i]->getName() + " ";
+    }
+
+    return result;
 }

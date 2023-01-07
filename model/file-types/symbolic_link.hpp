@@ -14,5 +14,5 @@ public:
     SymbolicLink(const SymbolicLink &other, Directory *parent = nullptr);
     void changeLink(const std::string &newPath);
     Directory *getParent() const;
-    virtual void getContent() const;
+    virtual const std::string& getContent() const;
 };
