@@ -94,7 +94,7 @@ const std::vector<File *> &Directory::getSubFiles() const
     return subFiles;
 }
 
-const std::string &Directory::getContent() const
+const std::string Directory::getContent() const
 {
     std::string result = "";
     for (int i = 0; i < subFiles.size(); i++)

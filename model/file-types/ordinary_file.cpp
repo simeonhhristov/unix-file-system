@@ -20,7 +20,7 @@ Directory *OrdinaryFile::getParent() const
     return this->parent;
 }
 
-const std::string& OrdinaryFile::getContent() const
+const std::string OrdinaryFile::getContent() const
 {
     return content;
 }

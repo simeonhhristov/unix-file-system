@@ -12,5 +12,5 @@ public:
     OrdinaryFile(const std::string &name, const std::string &content, Directory *parent);
     OrdinaryFile(const OrdinaryFile &other, Directory *parent = nullptr);
     Directory *getParent() const;
-    virtual const std::string& getContent() const;
+    virtual const std::string getContent() const;
 };

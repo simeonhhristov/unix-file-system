@@ -14,7 +14,7 @@ protected:
 public:
     const std::string getName() const;
     const MetaData getMetaData() const;
-    virtual const std::string &getContent() const = 0;
+    virtual const std::string getContent() const = 0;
     virtual File *getParent() const = 0;
     virtual ~File() = default;
 };

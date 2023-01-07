@@ -23,7 +23,7 @@ Directory *SymbolicLink::getParent() const
     return parent;
 }
 
-const std::string &SymbolicLink::getContent() const
+const std::string SymbolicLink::getContent() const
 {
     return filePath;
 }

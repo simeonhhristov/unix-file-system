@@ -19,5 +19,5 @@ public:
     void removeFile(const std::string &name);
     const std::vector<File *> &getSubFiles() const;
     Directory * getParent() const;
-    virtual const std::string& getContent() const;
+    virtual const std::string getContent() const;
 };
