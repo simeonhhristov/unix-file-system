@@ -29,6 +29,12 @@ int main()
 
     // std::cout << fileService->getWorkingDirectory() << "\n";
     fileService->changeDirectory("child1");
-    fileService->createOrdinaryFile("content1", "child2/file1");
-    std::cout << dirUtil.findFile(dir2, "child2/file1")->getContent() << "\n";
+    fileService->createOrdinaryFile("content1", "file2");
+    fileService->createOrdinaryFile("content2", "file3");
+    std::vector<std::string> paths;
+    // paths.push_back("child2");
+    paths.push_back("file2");
+    paths.push_back("file3");
+    fileService->concatenate(paths, "file1");
+    std::cout << dirUtil.findFile(dir2, "file1")->getContent() << "\n";
 }

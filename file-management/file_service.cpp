@@ -54,10 +54,29 @@ void FileService::concatenate(const std::vector<std::string> &filePaths, const s
 {
     if (repository->find(currentDirectory, destinationFile))
     {
-        throw std::invalid_argument("Destination file already exists");
+        throw std::invalid_argument("File already exists");
     }
 
-    
+    std::string combinedContent = "";
+    for (int i = 0; i < filePaths.size(); i++)
+    {
+        File *target = repository->find(currentDirectory, filePaths[i]);
+        if (!target)
+        {
+            throw std::invalid_argument("File does not exist");
+        }
+
+        OrdinaryFile * currentFile = dynamic_cast<OrdinaryFile *>(target);
+        if (!currentFile)
+        {
+            std::string error = target->getName() + " is not an ordinary file"; 
+            throw std::invalid_argument(error);
+        }
+
+        combinedContent += currentFile->getContent();
+    }
+
+    createOrdinaryFile(combinedContent, destinationFile);
 }
 
 void FileService::createOrdinaryFile(const std::string &content, const std::string &destinationFile)
