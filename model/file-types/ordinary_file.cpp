@@ -8,7 +8,7 @@ OrdinaryFile::OrdinaryFile(const std::string &name, const std::string &content, 
     parent->addFile(this);
 }
 
-OrdinaryFile::OrdinaryFile(const OrdinaryFile &other, Directory *parent) : File(other.name + " copy", FileType::File)
+OrdinaryFile::OrdinaryFile(const OrdinaryFile &other, Directory *parent) : File(other.name, FileType::File)
 {
     this->parent = parent == nullptr ? other.parent : parent;
     content = other.content;

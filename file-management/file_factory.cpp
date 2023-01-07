@@ -20,7 +20,7 @@ OrdinaryFile *FileFactory::createOrdinaryFile(const std::string &name, const std
     OrdinaryFile *newFile;
     try
     {
-        newFile = new OrdinaryFile(name, content,parent);
+        newFile = new OrdinaryFile(name, content, parent);
     }
     catch (...)
     {
@@ -42,46 +42,4 @@ SymbolicLink *FileFactory::createSymbolicLink(const std::string &name, const std
         return nullptr;
     }
     return newLink;
-}
-
-Directory *copyDirectory(Directory *directory)
-{
-    Directory *copy;
-    try
-    {
-        copy = new Directory(*directory, directory->getParent());
-    }
-    catch (...)
-    {
-        return nullptr;
-    }
-    return copy;
-}
-
-OrdinaryFile *copyOrdinaryFile(OrdinaryFile *file)
-{
-    OrdinaryFile *copy;
-    try
-    {
-        copy = new OrdinaryFile(*file, file->getParent());
-    }
-    catch (...)
-    {
-        return nullptr;
-    }
-    return copy;
-}
-
-SymbolicLink *copySymbolicLink(SymbolicLink *symbolicLink)
-{
-    SymbolicLink *copy;
-    try
-    {
-        copy = new SymbolicLink(*symbolicLink, symbolicLink->getParent());
-    }
-    catch (...)
-    {
-        return nullptr;
-    }
-    return copy;
 }

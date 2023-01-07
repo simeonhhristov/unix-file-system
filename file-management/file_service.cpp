@@ -88,13 +88,21 @@ void FileService::createOrdinaryFile(const std::string &content, const std::stri
     repository->addFile(currentDirectory, content, destinationFile, FileType::File);
 }
 
-void FileService::copyFiles()
+void FileService::copyFiles(const std::vector<std::string> &filePaths, const std::string &destinationPath)
 {
+    if (destinationPath.size() == 0)
+    {
+        throw std::invalid_argument("No file name specified");
+    }
+
+    for (int i = 0; i < filePaths.size(); i++)
+    {
+        repository->copyFile(currentDirectory, filePaths[i], destinationPath);
+    }
 }
 
 void FileService::removeFile(const std::string &filePath)
 {
-    //can't delete file that doesnt exist
     File *target = repository->find(currentDirectory, filePath);
     if (!target)
     {

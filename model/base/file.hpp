@@ -13,6 +13,7 @@ protected:
 
 public:
     const std::string getName() const;
+    void changeName(const std::string &newName);
     const MetaData getMetaData() const;
     virtual const std::string getContent() const = 0;
     virtual File *getParent() const = 0;

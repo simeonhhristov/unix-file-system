@@ -15,8 +15,8 @@ Directory::Directory(const std::string &name, Directory *parent) : File(name, Fi
 
 Directory::Directory(const Directory &other, Directory *parent) : File(other)
 {
-    this->parent = parent == nullptr ? other.parent : parent;
-    name = parent == nullptr ? name : other.name;
+    this->parent = (parent == nullptr) ? other.parent : parent;
+    name = (parent == nullptr) ? name : other.name;
 
     for (int i = 0; i < other.subFiles.size(); i++)
     {

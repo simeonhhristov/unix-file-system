@@ -17,8 +17,9 @@ public:
     FileRepository(Directory *root);
     ~FileRepository();
 
-    void addDirectory(Directory* startingDirectory, const std::string filePath);
+    void addDirectory(Directory *startingDirectory, const std::string filePath);
     void addFile(Directory *startingDirectory, const std::string &data, const std::string &filePath, FileType fileType);
+    void copyFile(Directory *startingDirectory, const std::string &fileToCopy, const std::string &destination);
     File *find(Directory *startingDirectory, const std::string &filePath);
     void remove(const std::string filePath);
     Directory *getRoot();

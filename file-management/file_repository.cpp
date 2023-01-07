@@ -41,6 +41,40 @@ void FileRepository::addFile(Directory *startingDirectory, const std::string &da
     directoryUtils.createFile(startingDirectory, filePath, data, fileType);
 }
 
+void FileRepository::copyFile(Directory *startingDirectory, const std::string &fileToCopy, const std::string &destinationPath)
+{
+    File *target = find(startingDirectory, fileToCopy);
+    if(!target)
+    {
+        throw std::invalid_argument("File does not exist");
+    }
+
+    if(target->getMetaData().fileType == FileType::Directory)
+    {
+        throw std::invalid_argument("File is a directory (not copied)");
+    }
+
+    DirectoryUtils directoryUtils = DirectoryUtils();
+    Directory * destination = directoryUtils.findDirectory(startingDirectory, destinationPath);
+    if(!destination)
+    {
+        throw std::invalid_argument("Destination directory does not exist");
+    }
+    
+    std::vector<File *> subFiles = destination->getSubFiles();
+    for (int i = 0; i < subFiles.size(); i++)
+    {
+        if (subFiles[i]->getName() == target->getName())
+        {
+            std::string copyName = target->getName() + " copy";
+            addFile(destination, target->getContent(), copyName, target->getMetaData().fileType);
+            return;
+        }
+    }
+
+    addFile(destination, target->getContent(), target->getName(), target->getMetaData().fileType);
+}
+
 File *FileRepository::find(Directory *startingDirectory, const std::string &filePath)
 {
     if (filePath.size() == 0)
