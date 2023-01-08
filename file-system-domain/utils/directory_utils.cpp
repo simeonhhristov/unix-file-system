@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include "directory_utils.hpp"
-#include "string_utils.hpp"
+#include "../../file-system-utils/string_utils.hpp"
 
 Directory *DirectoryUtils::traverseDirectories(Directory *startingDirectory, std::vector<std::string> &pathSegments) const
 {
