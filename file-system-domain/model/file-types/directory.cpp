@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 #include "directory.hpp"
 #include "ordinary_file.hpp"
 #include "symbolic_link.hpp"

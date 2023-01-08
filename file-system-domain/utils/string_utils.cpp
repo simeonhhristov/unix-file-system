@@ -1,3 +1,5 @@
+#include <string>
+#include <vector>
 #include "string_utils.hpp"
 
 std::string StringUtils::removeWhiteSpaces(const std::string &input)

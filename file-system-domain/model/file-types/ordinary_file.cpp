@@ -1,5 +1,5 @@
+#include <string>
 #include "ordinary_file.hpp"
-#include <iostream>
 
 OrdinaryFile::OrdinaryFile(const std::string &name, const std::string &content, Directory *parent) : File(name, FileType::File)
 {

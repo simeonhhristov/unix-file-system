@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "../model/file-types/directory.hpp"
 #include "../model/file-types/ordinary_file.hpp"
 #include "../model/file-types/symbolic_link.hpp"

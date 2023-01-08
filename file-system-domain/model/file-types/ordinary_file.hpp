@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "../base/file.hpp"
 #include "directory.hpp"
 

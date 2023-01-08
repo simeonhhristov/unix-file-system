@@ -1,3 +1,5 @@
+#include <string>
+#include <vector>
 #include "directory_utils.hpp"
 #include "string_utils.hpp"
 
