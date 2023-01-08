@@ -45,3 +45,10 @@ std::vector<std::string> StringUtils::segmentString(const std::string &input, ch
 
     return tokens;
 }
+
+std::string StringUtils::getLastAfter(const std::string text,const std::string &delimeter)
+{
+    unsigned lastDelimeter = text.find_last_of(delimeter);
+    std::string result = text.substr(lastDelimeter + 1);
+    return result;
+}
