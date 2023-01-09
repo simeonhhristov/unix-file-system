@@ -2,10 +2,10 @@
 #include <string>
 #include "file_service.hpp"
 
-FileService::FileService(FileRepository *repository, Directory *root)
+FileService::FileService()
 {
-    this->repository = repository;
-    this->currentDirectory = root;
+    currentDirectory = new Directory("", nullptr);
+    repository = new FileRepository(currentDirectory);
     directoryUtils = DirectoryUtils();
 }
 
@@ -20,7 +20,7 @@ std::string FileService::getWorkingDirectory() const
     return directoryUtils.getFullPath(currentDirectory);
 }
 
-Directory *FileService::changeDirectory(const std::string &path)
+std::string FileService::changeDirectory(const std::string &path)
 {
     Directory *result = directoryUtils.findDirectory(currentDirectory, path);
     if (result)
@@ -28,7 +28,7 @@ Directory *FileService::changeDirectory(const std::string &path)
         currentDirectory = result;
     }
 
-    return result;
+    return result->getName();
 }
 
 std::vector<std::string> FileService::getContentsList(const std::string &path) const

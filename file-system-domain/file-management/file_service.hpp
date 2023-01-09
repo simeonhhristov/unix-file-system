@@ -15,14 +15,13 @@ private:
     DirectoryUtils directoryUtils;
 
 public:
-    FileService(FileRepository *repository, Directory *root);
-    FileService() = delete;
+    FileService();
     FileService(const FileService &other) = delete;
     FileService &operator=(const FileService &other) = delete;
     ~FileService();
 
     std::string getWorkingDirectory() const;                                                         // pwd
-    Directory *changeDirectory(const std::string &path);                                             // cd
+    std::string changeDirectory(const std::string &path);                                             // cd
     std::vector<std::string> getContentsList(const std::string &path) const;                         // ls
     void concatenate(const std::vector<std::string> &filePaths, const std::string &destinationFile); // cat
     void createOrdinaryFile(const std::string &content, const std::string &destinationFile);         // touch
