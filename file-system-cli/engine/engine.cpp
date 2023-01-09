@@ -5,6 +5,7 @@
 
 Engine::Engine()
 {
+    currentDirectoryName = "/";
     fileService = new FileService();
     inputHandler = InputHandler();
 }
@@ -98,37 +99,148 @@ void Engine::resolveInput(std::vector<std::string> &inputArguments)
         break;
     }
     default:
-        std::cerr << "Invalid command";
+        std::cerr << "Invalid command"
+                  << "\n";
     }
 }
 
 void Engine::printWorkingDirectory()
 {
+    std::cout << fileService->getWorkingDirectory() << "\n";
 }
+
 void Engine::changeDirectory(std::vector<std::string> &inputArguments)
 {
+    if (inputArguments.size() != 2)
+    {
+        std::cerr << "Invalid number of arguments\n";
+        return;
+    }
+
+    std::string newDirectory = fileService->changeDirectory(inputArguments[1]);
+    if (newDirectory.size() == 0)
+    {
+        currentDirectoryName = "/";
+    }
+    currentDirectoryName = newDirectory;
 }
+
 void Engine::listFiles(std::vector<std::string> &inputArguments)
 {
+    if (inputArguments.size() != 2)
+    {
+        std::cerr << "Invalid number of arguments\n";
+        return;
+    }
+
+    std::vector<std::string> result;
+    try
+    {
+        result = fileService->getContentsList(inputArguments[1]);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << "\n";
+        result = fileService->getContentsList(".");
+    }
+
+    for (size_t i = 0; i < result.size(); i++)
+    {
+        std::cout << result[i] << " ";
+    }
+    std::cout << "\n";
 }
+
 void Engine::concatenateFiles(std::vector<std::string> &inputArguments)
 {
 }
+
 void Engine::copyFiles(std::vector<std::string> &inputArguments)
 {
 }
+
 void Engine::removeFiles(std::vector<std::string> &inputArguments)
 {
+    for (int i = 1; i < inputArguments.size(); i++)
+    {
+        try
+        {
+            fileService->removeFile(inputArguments[i]);
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
 }
+
 void Engine::makeDirectory(std::vector<std::string> &inputArguments)
 {
+    for (int i = 1; i < inputArguments.size(); i++)
+    {
+        try
+        {
+            fileService->makeDirectory(inputArguments[i]);
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
 }
+
 void Engine::removeDirectory(std::vector<std::string> &inputArguments)
 {
+    for (int i = 1; i < inputArguments.size(); i++)
+    {
+        try
+        {
+            fileService->removeDirectory(inputArguments[i]);
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
 }
+
 void Engine::makeSymbolicLink(std::vector<std::string> &inputArguments)
 {
+    if (inputArguments.size() != 3)
+    {
+        std::cerr << "Invalid number of arguments\n";
+        return;
+    }
+
+    try
+    {
+        fileService->makeSymbolicLink(inputArguments[1], inputArguments[2]);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
+
 void Engine::printStat(std::vector<std::string> &inputArguments)
 {
+    if (inputArguments.size() == 1)
+    {
+        std::cerr << "Invalid number of arguments\n";
+        return;
+    }
+
+    for (size_t i = 1; i < inputArguments.size(); i++)
+    {
+        std::string output;
+        try
+        {
+            output = fileService->getStat(inputArguments[i]);
+            std::cout << output << "\n";
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
 }

@@ -7,6 +7,7 @@
 class Engine
 {
 private:
+    std::string currentDirectoryName;
     FileService *fileService;
     InputHandler inputHandler;
 
