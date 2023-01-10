@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include "engine.hpp"
+#include "../../file-system-domain/file-management/file_service.hpp"
+#include "../input-handling/input_handler.hpp"
 
 Engine::Engine()
 {
@@ -22,11 +24,13 @@ void Engine::run()
         std::vector<std::string> inputArguments;
         try
         {
+            std::cout << currentDirectoryName << " $ ";
             inputArguments = inputHandler.readInput();
         }
         catch (const std::exception &e)
         {
             std::cerr << e.what() << '\n';
+            continue;
         }
         resolveInput(inputArguments);
     }
@@ -44,7 +48,12 @@ int Engine::getCommandId(const std::string &command)
 }
 
 void Engine::resolveInput(std::vector<std::string> &inputArguments)
-{
+{   
+    if (inputArguments.size() == 0)
+    {
+        return;
+    }
+
     int commandId = getCommandId(inputArguments[0]);
     switch (Commands(commandId))
     {
@@ -117,16 +126,31 @@ void Engine::changeDirectory(std::vector<std::string> &inputArguments)
         return;
     }
 
-    std::string newDirectory = fileService->changeDirectory(inputArguments[1]);
+    std::string newDirectory = currentDirectoryName;
+    try
+    {
+        newDirectory = fileService->changeDirectory(inputArguments[1]);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+
     if (newDirectory.size() == 0)
     {
         currentDirectoryName = "/";
+        return;
     }
     currentDirectoryName = newDirectory;
 }
 
 void Engine::listFiles(std::vector<std::string> &inputArguments)
 {
+    if (inputArguments.size() == 1)
+    {
+        inputArguments.push_back(".");
+    }
+
     if (inputArguments.size() != 2)
     {
         std::cerr << "Invalid number of arguments\n";
@@ -153,6 +177,43 @@ void Engine::listFiles(std::vector<std::string> &inputArguments)
 
 void Engine::concatenateFiles(std::vector<std::string> &inputArguments)
 {
+    if (inputArguments.size() == 1)
+    {
+        std::string input = inputHandler.readInputForNewFile();
+        std::cout << input << "\n";
+        return;
+    }
+
+    // remove 'cat' command argument
+    inputArguments.erase(inputArguments.begin());
+
+    try
+    {
+        // cases with output redirection
+        if (inputArguments[inputArguments.size() - 2] == ">")
+        {
+            // read from console
+            if (inputArguments.size() == 2)
+            {
+                std::string input = inputHandler.readInputForNewFile();
+                fileService->createOrdinaryFile(input, inputArguments[inputArguments.size() - 1]);
+            }
+            // concatenate files
+            else
+            {
+                std::vector<std::string> targetFiles(inputArguments.begin(), inputArguments.end() - 2);
+                fileService->concatenate(targetFiles, inputArguments[inputArguments.size() - 1]);
+            }
+            return;
+        }
+
+        std::string output = fileService->getConcatenatedContents(inputArguments);
+        std::cout << output << '\n';
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
 
 void Engine::copyFiles(std::vector<std::string> &inputArguments)

@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include "file_service.hpp"
+#include <iostream>
 
 FileService::FileService()
 {
@@ -23,11 +24,13 @@ std::string FileService::getWorkingDirectory() const
 std::string FileService::changeDirectory(const std::string &path)
 {
     Directory *result = directoryUtils.findDirectory(currentDirectory, path);
-    if (result)
+        
+    if (!result)
     {
-        currentDirectory = result;
+        throw std::invalid_argument("Directory does not exist");
     }
 
+    currentDirectory = result;
     return result->getName();
 }
 

@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "../../file-system-utils/string_utils.hpp"
-#include "input-handler.hpp"
+#include "input_handler.hpp"
 
 InputHandler::InputHandler()
 {
@@ -86,14 +86,15 @@ std::vector<std::string> InputHandler::readInput()
 {
     std::string input;
     std::getline(std::cin, input);
+    std::vector<std::string> arguments;
 
     input = stringUtils.removeWhiteSpaces(input);
     if (input.size() == 0)
     {
-        throw std::invalid_argument("Invalid input");
+        return arguments;
     }
 
-    std::vector<std::string> arguments = stringUtils.segmentString(input, ' ');
+    arguments = stringUtils.segmentString(input, ' ');
     validateCommand(arguments);                             // check for valid command
     validateArguments(arguments);                           // check for invalid symbols
     validateOutputRedirectOccurrenceAndPosition(arguments); // check position and number of occurances for '>'

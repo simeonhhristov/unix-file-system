@@ -25,6 +25,7 @@ public:
     std::vector<std::string> getContentsList(const std::string &path) const;                         // ls
     void concatenate(const std::vector<std::string> &filePaths, const std::string &destinationFile); // cat
     void createOrdinaryFile(const std::string &content, const std::string &destinationFile);         // cat (touch)
+    std::string getConcatenatedContents(const std::vector<std::string> &filePaths);
     void copyFiles(const std::vector<std::string> &filePaths, const std::string &destinationPath);   // cp
     void removeFile(const std::string &filePath);                                                    // rm
     void makeDirectory(const std::string &filePath);                                                 // mkdir
