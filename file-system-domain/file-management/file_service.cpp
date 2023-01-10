@@ -57,6 +57,21 @@ void FileService::concatenate(const std::vector<std::string> &filePaths, const s
         throw std::invalid_argument("File already exists");
     }
 
+    std::string combinedContent = getConcatenatedContents(filePaths);
+    createOrdinaryFile(combinedContent, destinationFile);
+}
+
+void FileService::createOrdinaryFile(const std::string &content, const std::string &destinationFile)
+{
+    if (destinationFile.size() == 0)
+    {
+        throw std::invalid_argument("No file name specified");
+    }
+    repository->addFile(currentDirectory, content, destinationFile, FileType::File);
+}
+
+std::string FileService::getConcatenatedContents(const std::vector<std::string> &filePaths)
+{
     std::string combinedContent = "";
     for (int i = 0; i < filePaths.size(); i++)
     {
@@ -75,17 +90,7 @@ void FileService::concatenate(const std::vector<std::string> &filePaths, const s
 
         combinedContent += currentFile->getContent();
     }
-
-    createOrdinaryFile(combinedContent, destinationFile);
-}
-
-void FileService::createOrdinaryFile(const std::string &content, const std::string &destinationFile)
-{
-    if (destinationFile.size() == 0)
-    {
-        throw std::invalid_argument("No file name specified");
-    }
-    repository->addFile(currentDirectory, content, destinationFile, FileType::File);
+    return combinedContent;
 }
 
 void FileService::copyFiles(const std::vector<std::string> &filePaths, const std::string &destinationPath)
