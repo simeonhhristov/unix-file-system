@@ -256,6 +256,11 @@ void DirectoryUtils::createFile(Directory *startingDirectory, const std::string 
 OrdinaryFile *DirectoryUtils::getFileFromSymLink(Directory *startingDirectory, const std::string &path)
 {
     File *target = findFile(startingDirectory, path);
+    if(!target)
+    {
+        throw std::invalid_argument("File does not exist");
+    }
+
     if (target->getMetaData().fileType == FileType::File)
     {
         OrdinaryFile *result = dynamic_cast<OrdinaryFile *>(target);

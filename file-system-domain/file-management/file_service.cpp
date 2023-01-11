@@ -84,6 +84,11 @@ std::string FileService::getConcatenatedContents(const std::vector<std::string> 
             throw std::invalid_argument("File does not exist");
         }
 
+        if (target->getMetaData().fileType == FileType::Symlink)
+        {
+            target = directoryUtils.getFileFromSymLink(currentDirectory, target->getContent());
+        }
+        
         OrdinaryFile *currentFile = dynamic_cast<OrdinaryFile *>(target);
         if (!currentFile)
         {

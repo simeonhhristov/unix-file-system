@@ -59,7 +59,7 @@ void FileRepository::copyFile(Directory *startingDirectory, const std::string &f
     {
         target = directoryUtils.getFileFromSymLink(startingDirectory, target->getContent());
     }
-
+    
     Directory * destination = directoryUtils.findDirectory(startingDirectory, destinationPath);
     if(!destination)
     {
