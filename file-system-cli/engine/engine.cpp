@@ -3,6 +3,7 @@
 #include <vector>
 #include "engine.hpp"
 #include "../../file-system-domain/file-management/file_service.hpp"
+#include "../../file-system-utils/error_constants.hpp"
 #include "../input-handling/input_handler.hpp"
 
 Engine::Engine()
@@ -108,8 +109,7 @@ void Engine::resolveInput(std::vector<std::string> &inputArguments)
         break;
     }
     default:
-        std::cerr << "Invalid command"
-                  << "\n";
+        std::cerr << inputArguments[0] + Errors::INVALID_COMMAND;
     }
 }
 
@@ -122,7 +122,7 @@ void Engine::changeDirectory(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() != 2)
     {
-        std::cerr << "Invalid number of arguments\n";
+        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
 
@@ -153,7 +153,7 @@ void Engine::listFiles(std::vector<std::string> &inputArguments)
 
     if (inputArguments.size() != 2)
     {
-        std::cerr << "Invalid number of arguments\n";
+        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
 
@@ -220,7 +220,7 @@ void Engine::copyFiles(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() < 3)
     {
-        std::cerr << "Invalid number of arguments\n";
+        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
     // remove 'cp' command argument
@@ -288,7 +288,7 @@ void Engine::makeSymbolicLink(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() != 3)
     {
-        std::cerr << "Invalid number of arguments\n";
+        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
 
@@ -306,7 +306,7 @@ void Engine::printStat(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() == 1)
     {
-        std::cerr << "Invalid number of arguments\n";
+        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
 

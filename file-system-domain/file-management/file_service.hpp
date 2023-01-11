@@ -5,6 +5,7 @@
 #include "../model/file-types/ordinary_file.hpp"
 #include "../model/file-types/symbolic_link.hpp"
 #include "../utils/directory_utils.hpp"
+#include "../../file-system-utils/string_utils.hpp"
 #include "file_repository.hpp"
 
 class FileService
@@ -13,7 +14,8 @@ private:
     FileRepository *repository;
     Directory *currentDirectory;
     DirectoryUtils directoryUtils;
-
+    StringUtils stringUtils;
+    
 public:
     FileService();
     FileService(const FileService &other) = delete;

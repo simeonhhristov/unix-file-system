@@ -1,5 +1,6 @@
 #include "file_repository.hpp"
 #include "../utils/directory_utils.hpp"
+#include "../../file-system-utils/error_constants.hpp"
 
 FileRepository::FileRepository()
 {
@@ -23,7 +24,8 @@ void FileRepository::addDirectory(Directory *startingDirectory, const std::strin
     // guard for existing file
     if (find(startingDirectory, filePath))
     {
-        throw std::invalid_argument("File already exists");
+        std::string error = filePath + Errors::DIRECTORY_ALREADY_EXISTS;
+        throw std::invalid_argument(error);
     }
 
     DirectoryUtils directoryUtils = DirectoryUtils();
@@ -32,9 +34,10 @@ void FileRepository::addDirectory(Directory *startingDirectory, const std::strin
 
 void FileRepository::addFile(Directory *startingDirectory, const std::string &data, const std::string &filePath, FileType fileType)
 {
-    if(find(startingDirectory, filePath))
+    if (find(startingDirectory, filePath))
     {
-        throw std::invalid_argument("File already exists");
+        std::string error = filePath + Errors::FILE_ALREADY_EXISTS;
+        throw std::invalid_argument(error);
     }
 
     DirectoryUtils directoryUtils = DirectoryUtils();
@@ -44,28 +47,31 @@ void FileRepository::addFile(Directory *startingDirectory, const std::string &da
 void FileRepository::copyFile(Directory *startingDirectory, const std::string &fileToCopy, const std::string &destinationPath)
 {
     File *target = find(startingDirectory, fileToCopy);
-    if(!target)
+    if (!target)
     {
-        throw std::invalid_argument("File does not exist");
+        std::string error = fileToCopy + Errors::FILE_DOES_NOT_EXIST;
+        throw std::invalid_argument(error);
     }
 
-    if(target->getMetaData().fileType == FileType::Directory)
+    if (target->getMetaData().fileType == FileType::Directory)
     {
-        throw std::invalid_argument("File is a directory (not copied)");
+        std::string error = fileToCopy + Errors::FILE_IS_DIRECTORY;
+        throw std::invalid_argument(error);
     }
 
     DirectoryUtils directoryUtils = DirectoryUtils();
-    if(target->getMetaData().fileType == FileType::Symlink)
+    if (target->getMetaData().fileType == FileType::Symlink)
     {
         target = directoryUtils.getFileFromSymLink(startingDirectory, target->getContent());
     }
-    
-    Directory * destination = directoryUtils.findDirectory(startingDirectory, destinationPath);
-    if(!destination)
+
+    Directory *destination = directoryUtils.findDirectory(startingDirectory, destinationPath);
+    if (!destination)
     {
-        throw std::runtime_error("Destination directory does not exist");
+        std::string error = destinationPath + Errors::DIRECTORY_DOES_NOT_EXIST;
+        throw std::runtime_error(error);
     }
-    
+
     std::vector<File *> subFiles = destination->getSubFiles();
     for (int i = 0; i < subFiles.size(); i++)
     {
@@ -100,7 +106,8 @@ void FileRepository::remove(const std::string filePath)
 {
     if (!find(nullptr, filePath))
     {
-        throw std::invalid_argument("File does not exist");
+        std::string error = filePath + Errors::FILE_DOES_NOT_EXIST;
+        throw std::invalid_argument(error);
     }
 
     // traverse from root till the end

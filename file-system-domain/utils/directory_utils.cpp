@@ -1,7 +1,13 @@
 #include <string>
 #include <vector>
 #include "directory_utils.hpp"
+#include "../../file-system-utils/error_constants.hpp"
 #include "../../file-system-utils/string_utils.hpp"
+
+DirectoryUtils::DirectoryUtils()
+{
+    stringUtils = StringUtils();
+}
 
 Directory *DirectoryUtils::traverseDirectories(Directory *startingDirectory, std::vector<std::string> &pathSegments) const
 {
@@ -213,7 +219,8 @@ void DirectoryUtils::createDirectory(Directory *startingDirectory, const std::st
     Directory *target = traverseDirectories(startingDirectory, pathSegments);
     if (target)
     {
-        throw std::invalid_argument("Directory already exists");
+        std::string error = target->getName() + Errors::DIRECTORY_ALREADY_EXISTS;
+        throw std::invalid_argument(error);
     }
     traverseAndCreateDirectories(startingDirectory, pathSegments);
 }
@@ -232,7 +239,8 @@ void DirectoryUtils::createFile(Directory *startingDirectory, const std::string 
     File *target = findFile(fileLocation, fileName);
     if (target)
     {
-        throw std::invalid_argument("File already exists");
+        std::string error = stringUtils.getLastAfter(fileName, "/") + Errors::FILE_ALREADY_EXISTS;
+        throw std::invalid_argument(error);
     }
 
     FileFactory factory = FileFactory();
@@ -256,9 +264,10 @@ void DirectoryUtils::createFile(Directory *startingDirectory, const std::string 
 OrdinaryFile *DirectoryUtils::getFileFromSymLink(Directory *startingDirectory, const std::string &path)
 {
     File *target = findFile(startingDirectory, path);
-    if(!target)
+    if (!target)
     {
-        throw std::invalid_argument("File does not exist");
+        std::string error = stringUtils.getLastAfter(path, "/") + Errors::FILE_IS_DIRECTORY;
+        throw std::invalid_argument(error);
     }
 
     if (target->getMetaData().fileType == FileType::File)
@@ -268,7 +277,7 @@ OrdinaryFile *DirectoryUtils::getFileFromSymLink(Directory *startingDirectory, c
     }
     if (target->getMetaData().fileType == FileType::Directory)
     {
-        std::string error = target->getName() + " is a directory";
+        std::string error = target->getName() + Errors::FILE_IS_DIRECTORY;
         throw std::invalid_argument(error);
     }
     SymbolicLink *reachedTarget = dynamic_cast<SymbolicLink *>(target);

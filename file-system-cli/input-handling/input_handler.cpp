@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "../../file-system-utils/string_utils.hpp"
+#include "../../file-system-utils/error_constants.hpp"
 #include "input_handler.hpp"
 
 InputHandler::InputHandler()
@@ -20,7 +21,7 @@ void InputHandler::validateArguments(const std::vector<std::string> &arguments)
         if (!isValidArgument(arguments[i]))
         {
             // empty vector signals invalid input to the engine
-            std::string error = arguments[i] + " contains invalid symbols (`, \\, |, >)";
+            std::string error = arguments[i] + Errors::ARGUMENT_WITH_INVALID_SYMBOLS;
             throw std::invalid_argument(error);
         }
     }
@@ -66,18 +67,18 @@ void InputHandler::validateOutputRedirectOccurrenceAndPosition(const std::vector
 
             if (occurences > 1)
             {
-                throw std::invalid_argument("A maximum of 1 output redirection operator is allowed");
+                throw std::invalid_argument(Errors::MANY_OUTPUT_REDIRECTION_OPERATORS);
             }
             if (arguments.size() - i > 2)
             {
-                throw std::invalid_argument("Only one argument is allowed after the output redirection operator");
+                throw std::invalid_argument(Errors::MANY_ARGS_POST_OUTPUT_REDIRECTION_OPERATOR);
             }
         }
     }
 
     if (occurences == 1 && arguments[0] != "cat")
     {
-        std::string error = arguments[0] + " does not require an output redirection operator";
+        std::string error = arguments[0] + Errors::COMMAND_WITHOUT_OUTPUT_REDIRECTION;
         throw std::invalid_argument(error);
     }
 }

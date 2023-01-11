@@ -1,13 +1,16 @@
 #include <vector>
 #include <string>
-#include "file_service.hpp"
 #include <iostream>
+#include "file_service.hpp"
+#include "../../file-system-utils/error_constants.hpp"
+#include "../../file-system-utils/string_utils.hpp"
 
 FileService::FileService()
 {
     currentDirectory = new Directory("", nullptr);
     repository = new FileRepository(currentDirectory);
     directoryUtils = DirectoryUtils();
+    stringUtils = StringUtils();
 }
 
 FileService::~FileService()
@@ -27,7 +30,8 @@ std::string FileService::changeDirectory(const std::string &path)
 
     if (!result)
     {
-        throw std::invalid_argument("Directory does not exist");
+        std::string error = path + Errors::DIRECTORY_DOES_NOT_EXIST;
+        throw std::invalid_argument(error);
     }
 
     currentDirectory = result;
@@ -41,7 +45,8 @@ std::vector<std::string> FileService::getContentsList(const std::string &path) c
 
     if (!target)
     {
-        throw std::invalid_argument("No such directory");
+        std::string error = path + Errors::DIRECTORY_DOES_NOT_EXIST;
+        throw std::invalid_argument(error);
     }
 
     std::vector<File *> subFiles = target->getSubFiles();
@@ -57,7 +62,8 @@ void FileService::concatenate(const std::vector<std::string> &filePaths, const s
 {
     if (repository->find(currentDirectory, destinationFile))
     {
-        throw std::invalid_argument("File already exists");
+        std::string error = destinationFile + Errors::FILE_ALREADY_EXISTS;
+        throw std::invalid_argument(error);
     }
 
     std::string combinedContent = getConcatenatedContents(filePaths);
@@ -68,7 +74,7 @@ void FileService::createOrdinaryFile(const std::string &content, const std::stri
 {
     if (destinationFile.size() == 0)
     {
-        throw std::invalid_argument("No file name specified");
+        throw std::invalid_argument(Errors::NOT_SPECIFIED_FILE);
     }
     repository->addFile(currentDirectory, content, destinationFile, FileType::File);
 }
@@ -81,18 +87,19 @@ std::string FileService::getConcatenatedContents(const std::vector<std::string> 
         File *target = repository->find(currentDirectory, filePaths[i]);
         if (!target)
         {
-            throw std::invalid_argument("File does not exist");
+            std::string error = filePaths[i] + Errors::FILE_DOES_NOT_EXIST;
+            throw std::invalid_argument(error);
         }
 
         if (target->getMetaData().fileType == FileType::Symlink)
         {
             target = directoryUtils.getFileFromSymLink(currentDirectory, target->getContent());
         }
-        
+
         OrdinaryFile *currentFile = dynamic_cast<OrdinaryFile *>(target);
         if (!currentFile)
         {
-            std::string error = target->getName() + " is not an ordinary file";
+            std::string error = filePaths[i] + Errors::FILE_NOT_ORDINARY;
             throw std::invalid_argument(error);
         }
 
@@ -105,7 +112,7 @@ void FileService::copyFiles(const std::vector<std::string> &filePaths, const std
 {
     if (destinationPath.size() == 0)
     {
-        throw std::invalid_argument("No file name specified");
+        throw std::invalid_argument(Errors::NOT_SPECIFIED_DESTINATION);
     }
 
     for (int i = 0; i < filePaths.size(); i++)
@@ -127,14 +134,16 @@ void FileService::removeFile(const std::string &filePath)
     File *target = repository->find(currentDirectory, filePath);
     if (!target)
     {
-        throw std::invalid_argument("File does not exist");
+        std::string error = filePath + Errors::FILE_DOES_NOT_EXIST;
+        throw std::invalid_argument(error);
     }
 
     // guard if file is a directory
     Directory *targetDirectory = dynamic_cast<Directory *>(target);
     if (targetDirectory)
     {
-        throw std::invalid_argument("Specified file is a directory");
+        std::string error = filePath + Errors::FILE_IS_DIRECTORY;
+        throw std::invalid_argument(error);
     }
 
     Directory *parentDirectory = dynamic_cast<Directory *>(target->getParent());
@@ -146,7 +155,8 @@ void FileService::makeDirectory(const std::string &filePath)
 {
     if (filePath.size() == 0)
     {
-        throw std::invalid_argument("Invalid path specified");
+        std::string error = filePath + Errors::INVALID_PATH;
+        throw std::invalid_argument(error);
     }
 
     repository->addDirectory(currentDirectory, filePath);
@@ -158,25 +168,28 @@ void FileService::removeDirectory(const std::string &filePath)
     File *target = repository->find(currentDirectory, filePath);
     if (!target)
     {
-        throw std::invalid_argument("Directory does not exist");
+        std::string error = filePath + Errors::DIRECTORY_DOES_NOT_EXIST;
+        throw std::invalid_argument(error);
     }
 
     // can't delete file which is not a directory
     Directory *targetDirectory = dynamic_cast<Directory *>(target);
     if (!targetDirectory)
     {
-        throw std::invalid_argument("Specified file is not a directory");
+        std::string error = filePath + Errors::FILE_NOT_DIRECTORY;
+        throw std::invalid_argument(error);
     }
 
     // can't delete current directory
     if (currentDirectory == targetDirectory)
     {
-        throw std::invalid_argument("Invalid argument");
+        throw std::invalid_argument(Errors::CANT_DELETE_CURRENT_DIR);
     }
 
     if (targetDirectory->getSubFiles().size() > 0)
     {
-        throw std::invalid_argument("Directory is not empty");
+        std::string error = filePath + Errors::DIR_IS_NOT_EMPTY;
+        throw std::invalid_argument(error);
     }
 
     Directory *parent = targetDirectory->getParent();
@@ -200,13 +213,12 @@ void FileService::makeSymbolicLink(const std::string &targetPath, const std::str
     File *fileTarget = repository->find(currentDirectory, fileToLink);
     if (fileTarget && fileTarget->getMetaData().fileType == FileType::Directory)
     {
-        std::string error = fileTarget->getName() + " is a directory";
+        std::string error = targetPath + Errors::FILE_IS_DIRECTORY;
         throw std::invalid_argument(error);
     }
 
     // determine name of targeted file
-    unsigned lastSlash = fileToLink.find_last_of("/");
-    std::string targetFileName = fileToLink.substr(lastSlash + 1);
+    std::string targetFileName = stringUtils.getLastAfter(fileToLink, "/");
 
     std::string newFilePath = linkLocation.size() == 0 ? targetFileName : linkLocation;
     repository->addFile(currentDirectory, fileToLink, newFilePath, FileType::Symlink);
@@ -217,7 +229,7 @@ std::string FileService::getStat(const std::string &path) const
     File *target = repository->find(currentDirectory, path);
     if (!target)
     {
-        throw std::invalid_argument("No such file or directory");
+        throw std::invalid_argument(Errors::NO_SUCH_FILE_OR_DIR);
     }
 
     MetaData data = target->getMetaData();

@@ -6,16 +6,20 @@
 #include "../model/file-types/directory.hpp"
 #include "../model/file-types/ordinary_file.hpp"
 #include "../model/file-types/symbolic_link.hpp"
-
+#include "../../file-system-utils/string_utils.hpp"
 class DirectoryUtils
 {
 private:
+    StringUtils stringUtils;
+
     Directory *goUpTheHierarchy(Directory *directory) const;
     Directory *goDownTheHierarchy(Directory *directory, const std::string &nextDirectoryName) const;
     Directory *goToRoot(Directory *directory) const;
     Directory *traverseDirectories(Directory *startingDirectory, std::vector<std::string> &pathSegments) const;
     Directory *traverseAndCreateDirectories(Directory *startingDirectory, std::vector<std::string> &pathSegments) const;
 public:
+    DirectoryUtils();
+
     std::string &getFullPath(Directory *directory) const;
     Directory *findDirectory(Directory *startingDirectory, const std::string &path) const;
     File *findFile(Directory * startingDirectory, const std::string &path) const;
