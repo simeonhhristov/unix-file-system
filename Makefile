@@ -11,5 +11,6 @@ build:
 	 file-system-domain/file-management/file_service.cpp\
 	 file-system-domain/file-management/file_repository.cpp\
 	 file-system-utils/string_utils.cpp\
+	 file-system-utils/meta_data_convert.cpp\
 	 file-system-cli/engine/engine.cpp\
 	 file-system-cli/input-handling/input_handler.cpp\

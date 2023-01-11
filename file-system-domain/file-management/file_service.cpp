@@ -4,6 +4,7 @@
 #include "file_service.hpp"
 #include "../../file-system-utils/error_constants.hpp"
 #include "../../file-system-utils/string_utils.hpp"
+#include "../../file-system-utils/meta_data_convert.hpp"
 
 FileService::FileService()
 {
@@ -234,12 +235,12 @@ std::string FileService::getStat(const std::string &path) const
 
     MetaData data = target->getMetaData();
     std::string result;
-
-    result += std::to_string(data.fileSize) + " ";
-    // result += printFileType(data.fileType) + " ";
-    result += std::to_string(data.lastAccessDate) + " ";
-    result += std::to_string(data.lastMetaDataModificationDate) + " ";
-    result += std::to_string(data.serialNumber);
+    result += "Size: " + std::to_string(data.fileSize);
+    result += ", Type: " + MetaDataConvert::convertFileTypeToString(data.fileType);
+    result += ", Last Modification: " + MetaDataConvert::convertUnixTimeStampToString(data.lastContentModificationDate);
+    result += ", Last Access: " + MetaDataConvert::convertUnixTimeStampToString(data.lastAccessDate);
+    result += ", Last Meta Data Modification: " + MetaDataConvert::convertUnixTimeStampToString(data.lastMetaDataModificationDate);
+    result += ", SerialNo.:" + std::to_string(data.serialNumber);
 
     return result;
 }
