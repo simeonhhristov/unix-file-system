@@ -48,7 +48,7 @@ int Engine::getCommandId(const std::string &command)
 }
 
 void Engine::resolveInput(std::vector<std::string> &inputArguments)
-{   
+{
     if (inputArguments.size() == 0)
     {
         return;
@@ -218,6 +218,25 @@ void Engine::concatenateFiles(std::vector<std::string> &inputArguments)
 
 void Engine::copyFiles(std::vector<std::string> &inputArguments)
 {
+    if (inputArguments.size() < 3)
+    {
+        std::cerr << "Invalid number of arguments\n";
+        return;
+    }
+    // remove 'cp' command argument
+    inputArguments.erase(inputArguments.begin());
+
+    // remove destination argument
+    std::string destinationPath = inputArguments[inputArguments.size() - 1];
+    inputArguments.pop_back();
+    try
+    {
+        fileService->copyFiles(inputArguments, destinationPath);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
 
 void Engine::removeFiles(std::vector<std::string> &inputArguments)

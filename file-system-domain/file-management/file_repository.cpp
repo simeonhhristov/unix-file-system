@@ -55,10 +55,15 @@ void FileRepository::copyFile(Directory *startingDirectory, const std::string &f
     }
 
     DirectoryUtils directoryUtils = DirectoryUtils();
+    if(target->getMetaData().fileType == FileType::Symlink)
+    {
+        target = directoryUtils.getFileFromSymLink(startingDirectory, target->getContent());
+    }
+
     Directory * destination = directoryUtils.findDirectory(startingDirectory, destinationPath);
     if(!destination)
     {
-        throw std::invalid_argument("Destination directory does not exist");
+        throw std::runtime_error("Destination directory does not exist");
     }
     
     std::vector<File *> subFiles = destination->getSubFiles();
@@ -66,7 +71,7 @@ void FileRepository::copyFile(Directory *startingDirectory, const std::string &f
     {
         if (subFiles[i]->getName() == target->getName())
         {
-            std::string copyName = target->getName() + " copy";
+            std::string copyName = directoryUtils.createFileCopyName(destination, target->getName());
             addFile(destination, target->getContent(), copyName, target->getMetaData().fileType);
             return;
         }

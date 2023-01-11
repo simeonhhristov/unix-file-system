@@ -21,4 +21,6 @@ public:
     File *findFile(Directory * startingDirectory, const std::string &path) const;
     void createDirectory(Directory * startingDirectory, const std::string &path) const;
     void createFile(Directory *startingDirectory, const std::string &path, const std::string &data, FileType type) const;
+    OrdinaryFile *getFileFromSymLink(Directory *startingDirectory, const std::string &path);
+    std::string createFileCopyName(Directory *targetDirectory, const std::string fileName);
 };

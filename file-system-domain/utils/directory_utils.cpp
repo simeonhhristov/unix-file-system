@@ -234,7 +234,7 @@ void DirectoryUtils::createFile(Directory *startingDirectory, const std::string 
     {
         throw std::invalid_argument("File already exists");
     }
-     
+
     FileFactory factory = FileFactory();
     switch (fileType)
     {
@@ -251,4 +251,39 @@ void DirectoryUtils::createFile(Directory *startingDirectory, const std::string 
     case FileType::Directory:
         break;
     }
+}
+
+OrdinaryFile *DirectoryUtils::getFileFromSymLink(Directory *startingDirectory, const std::string &path)
+{
+    File *target = findFile(startingDirectory, path);
+    if (target->getMetaData().fileType == FileType::File)
+    {
+        OrdinaryFile *result = dynamic_cast<OrdinaryFile *>(target);
+        return result;
+    }
+    if (target->getMetaData().fileType == FileType::Directory)
+    {
+        std::string error = target->getName() + " is a directory";
+        throw std::invalid_argument(error);
+    }
+    SymbolicLink *reachedTarget = dynamic_cast<SymbolicLink *>(target);
+    // if symlink points to symlink
+    return getFileFromSymLink(startingDirectory, reachedTarget->getContent());
+}
+
+std::string DirectoryUtils::createFileCopyName(Directory *targetDirectory, const std::string fileName)
+{
+    std::string resultName = fileName + "_copy";
+    int copyNumber = 1;
+    std::vector<File *> subFiles = targetDirectory->getSubFiles();
+
+    for (size_t i = 0; i < subFiles.size(); i++)
+    {
+        if (subFiles[i]->getName() == resultName)
+        {
+            resultName = fileName + "_copy" + std::to_string(copyNumber);
+            copyNumber++;
+        }
+    }
+    return resultName;
 }

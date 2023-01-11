@@ -24,7 +24,7 @@ std::string FileService::getWorkingDirectory() const
 std::string FileService::changeDirectory(const std::string &path)
 {
     Directory *result = directoryUtils.findDirectory(currentDirectory, path);
-        
+
     if (!result)
     {
         throw std::invalid_argument("Directory does not exist");
@@ -84,10 +84,10 @@ std::string FileService::getConcatenatedContents(const std::vector<std::string> 
             throw std::invalid_argument("File does not exist");
         }
 
-        OrdinaryFile * currentFile = dynamic_cast<OrdinaryFile *>(target);
+        OrdinaryFile *currentFile = dynamic_cast<OrdinaryFile *>(target);
         if (!currentFile)
         {
-            std::string error = target->getName() + " is not an ordinary file"; 
+            std::string error = target->getName() + " is not an ordinary file";
             throw std::invalid_argument(error);
         }
 
@@ -105,7 +105,15 @@ void FileService::copyFiles(const std::vector<std::string> &filePaths, const std
 
     for (int i = 0; i < filePaths.size(); i++)
     {
-        repository->copyFile(currentDirectory, filePaths[i], destinationPath);
+        try
+        {
+            repository->copyFile(currentDirectory, filePaths[i], destinationPath);
+        }
+        catch (const std::runtime_error &e)
+        {
+            // rethrow to cancel copy loop
+            throw e;
+        }
     }
 }
 
@@ -117,14 +125,14 @@ void FileService::removeFile(const std::string &filePath)
         throw std::invalid_argument("File does not exist");
     }
 
-    //guard if file is a directory
+    // guard if file is a directory
     Directory *targetDirectory = dynamic_cast<Directory *>(target);
-    if (targetDirectory) 
+    if (targetDirectory)
     {
         throw std::invalid_argument("Specified file is a directory");
     }
 
-    Directory * parentDirectory = dynamic_cast<Directory *>(target->getParent());
+    Directory *parentDirectory = dynamic_cast<Directory *>(target->getParent());
     parentDirectory->removeFile(target->getName());
     delete target;
 }
@@ -141,21 +149,21 @@ void FileService::makeDirectory(const std::string &filePath)
 
 void FileService::removeDirectory(const std::string &filePath)
 {
-    //can't delete file that doesnt exist
+    // can't delete file that doesnt exist
     File *target = repository->find(currentDirectory, filePath);
     if (!target)
     {
         throw std::invalid_argument("Directory does not exist");
     }
 
-    //can't delete file which is not a directory
+    // can't delete file which is not a directory
     Directory *targetDirectory = dynamic_cast<Directory *>(target);
-    if (!targetDirectory) 
+    if (!targetDirectory)
     {
         throw std::invalid_argument("Specified file is not a directory");
     }
 
-    //can't delete current directory
+    // can't delete current directory
     if (currentDirectory == targetDirectory)
     {
         throw std::invalid_argument("Invalid argument");
@@ -177,14 +185,14 @@ void FileService::makeSymbolicLink(const std::string &targetPath, const std::str
     // make filePath absolute
     if (fileToLink[0] != '/')
     {
-        //avoid double '/' at start if currentDirectory is root
+        // avoid double '/' at start if currentDirectory is root
         std::string rootPath = getWorkingDirectory();
         rootPath = (rootPath == "/" ? "" : rootPath);
         fileToLink = rootPath + "/" + fileToLink;
     }
 
     // check if requested to link file is a directory
-    File * fileTarget = repository->find(currentDirectory, fileToLink);
+    File *fileTarget = repository->find(currentDirectory, fileToLink);
     if (fileTarget && fileTarget->getMetaData().fileType == FileType::Directory)
     {
         std::string error = fileTarget->getName() + " is a directory";
