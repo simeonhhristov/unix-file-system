@@ -39,7 +39,7 @@ $ start generated_file_name.exe
 
 * `FileFactory`
 Клас отговорен за създаване на 'модели' по време на изпълнение на програмата.
-```
+```c++
 class FileFactory
 {
 public:
@@ -52,7 +52,7 @@ public:
 
 * `FileRepository`
 Клас от ниския слой, отговорен за ***съхранение***, ***вмъкване***, ***махане***, ***промяна*** и ***намиране*** на данни.
-```
+```c++
 class FileRepository
 {
 private:
@@ -72,7 +72,7 @@ public:
 
 * `FileService`
 Клас от средния слой в който се инжектира `FileRepository`, отговорен за по-сложната бизнес логика и сигнализиране за проблеми.
-```
+```c++
 class FileService
 {
 private:
@@ -103,8 +103,10 @@ public:
 `File`, `Directory`, `OrdinaryFile` и `SymbolicLink`.
 <br />
 
-* `MetaData` структура за организация на **метаданните** за един файл.
-```
+* `MetaData` 
+Структура за организация на **метаданните** за един файл.
+
+```c++
 struct MetaData
 {
     int serialNumber;
@@ -119,7 +121,8 @@ struct MetaData
 
 * `File`
 Базов клас представляващ общите черти на всеки файл.
-```
+
+```c++
 class File
 {
 protected:
@@ -144,7 +147,8 @@ public:
 
 * `Directory`
 Модел наследяващ `File` който има способността да съхранява в себе си други модели наследници на `File`.
-```
+
+```c++
 class Directory : public File
 {
 private:
@@ -165,7 +169,8 @@ public:
 
 * `OrdinaryFile`
 Модел наследяващ `File` който има способността да съхранява в себе си информация под формата на текст.
-```
+
+```c++
 class OrdinaryFile : public File
 {
 private:
@@ -182,7 +187,8 @@ public:
 
 * `SymbolicLink`
 Модел наследяващ `File` представляващ символна връзка към модел от тип `OrdinaryFile` позволяващ бърз достъп от всяко място във файловата система до файла към който е връзката.
-```
+
+```c++
 class SymbolicLink : public File
 {
 private:
@@ -203,7 +209,8 @@ public:
 
 * `DirectoryUtils`
 Клас предоставящ инструменти за обхождане на директории, намиране и създаване на файлове.
-```
+
+```c++
 class DirectoryUtils
 {
 private:
@@ -230,7 +237,7 @@ public:
 * `IdGenerator`
 Клас с една инстанция, използван за номериране на файлове в системата.
 
-```
+```c++
 IdGenerator IdGenerator::shared = IdGenerator();
 
 class IdGenerator
@@ -258,7 +265,7 @@ private:
 #### `engine`
 Съдържа класът `Engine` (най-горния слой). Той е отговорен за стартирането на програмата и  обработването на грешки от `FileService` и `InputHandler`.
 
-```
+```c++
 class Engine
 {
 private:
@@ -304,7 +311,7 @@ private:
 #### `input-handling`
 Съдържа `InputHandler` отговорен за прочитане и валидиране на входни данни от потребителя.
 
-```
+```c++
 class InputHandler
 {
 private:
@@ -323,7 +330,7 @@ public:
 
 #### `utils`
 Съдържа `cli_constants`, `namespace` от константи използвани във `file-system-cli`.
-```
+```c++
 namespace cli {
     const std::string VALID_COMMANDS[] = {"pwd", "cd", "ls", "cat", "cp", "rm", "mkdir", "rmdir", "ln", "stat"};
     const int NUM_OF_VALID_COMMANDS = 10;
@@ -340,7 +347,7 @@ namespace cli {
 #### `errors`
 `namespace` от константи използвани във `file-system-cli`  и `file-system-cli`.
 
-```
+```c++
 namespace errors {
     const std::string NO_SUCH_FILE_OR_DIR = "ERROR: No such file or directory";
     const std::string FILE_NOT_DIRECTORY = ": File is not a directory.";
@@ -373,7 +380,7 @@ namespace errors {
 #### `meta_data_convert`
 `namespace` с помощни функции за представяне на мета данни в по-удобен за четене формат
 
-```
+```c++
 namespace metadata_convert {
     std::string convertFileTypeToString(FileType fileType);
     std::string convertUnixTimeStampToString(long timestamp);
@@ -383,7 +390,7 @@ namespace metadata_convert {
 
 #### `StringUtils`
 Клас с помощни фунцкии за по-често срещаните и необходими операции със `std::string`
-```
+```c++
 class StringUtils
 {
 public:
@@ -391,4 +398,39 @@ public:
     std::vector<std::string> segmentString(const std::string &input, char delimiter);
     std::string getLastAfter(const std::string text,const std::string &delimeter);
 };
+```
+<br />
+
+## Демонстрация на използване
+```console
+unix-file-system $ make build
+unix-file-system $ ./a.out
+/ $ pwd
+/
+/ $ mkdir directory1
+/ $ cat > directory1/file1
+This is a test
+input
+.
+/ $ ls
+directory1 
+/ $ cd directory1
+directory1 $ ls
+file1 
+directory1 $ cd ..
+/ $ cp directory1/file1 /
+/ $ ls
+directory1 file1 
+/ $ cat file1
+This is a test
+input
+/ $ rm directory1/file1
+/ $ ls directory1
+
+/ $ stat directory1
+Size: 0, Type: Directory, Last Modification: 12/1/2023 21:46:18, Last Access: 12/1/2023 21:46:24, Last Meta Data Modification: 12/1/2023 21:46:24, SerialNo.:2
+/ $ rmdir directory1
+/ $ ls
+file1 
+/ $ 
 ```
