@@ -4,10 +4,6 @@
 #include <vector>
 #include "../../file-system-utils/string_utils.hpp"
 
-static const char INVALID_CHARACTERS[] = {'\\', '|', '`', '>'};
-static const std::string VALID_COMMANDS[] = {"pwd", "cd", "ls", "cat", "cp", "rm", "mkdir", "rmdir", "ln", "stat"};
-static const int NUM_OF_VALID_COMMANDS = 10;
-
 class InputHandler
 {
 private:

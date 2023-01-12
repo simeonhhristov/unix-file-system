@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace Errors {
+namespace errors {
     const std::string NO_SUCH_FILE_OR_DIR = "ERROR: No such file or directory";
     const std::string FILE_NOT_DIRECTORY = ": File is not a directory.";
     const std::string FILE_DOES_NOT_EXIST = ": File does not exist.";

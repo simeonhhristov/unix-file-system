@@ -3,6 +3,7 @@
 #include <vector>
 #include "../../file-system-utils/string_utils.hpp"
 #include "../../file-system-utils/error_constants.hpp"
+#include "../utils/cli_constants.hpp"
 #include "input_handler.hpp"
 
 InputHandler::InputHandler()
@@ -21,7 +22,7 @@ void InputHandler::validateArguments(const std::vector<std::string> &arguments)
         if (!isValidArgument(arguments[i]))
         {
             // empty vector signals invalid input to the engine
-            std::string error = arguments[i] + Errors::ARGUMENT_WITH_INVALID_SYMBOLS;
+            std::string error = arguments[i] + errors::ARGUMENT_WITH_INVALID_SYMBOLS;
             throw std::invalid_argument(error);
         }
     }
@@ -31,10 +32,10 @@ bool InputHandler::isValidArgument(const std::string &input)
 {
     for (size_t i = 0; i < input.size(); i++)
     {
-        if (input[i] == INVALID_CHARACTERS[0] ||
-            input[i] == INVALID_CHARACTERS[1] ||
-            input[i] == INVALID_CHARACTERS[2] ||
-            input[i] == INVALID_CHARACTERS[3])
+        if (input[i] == cli::INVALID_CHARACTERS[0] ||
+            input[i] == cli::INVALID_CHARACTERS[1] ||
+            input[i] == cli::INVALID_CHARACTERS[2] ||
+            input[i] == cli::INVALID_CHARACTERS[3])
         {
             return false;
         }
@@ -44,9 +45,9 @@ bool InputHandler::isValidArgument(const std::string &input)
 }
 void InputHandler::validateCommand(const std::vector<std::string> &arguments)
 {
-    for (int i = 0; i < NUM_OF_VALID_COMMANDS; i++)
+    for (int i = 0; i < cli::NUM_OF_VALID_COMMANDS; i++)
     {
-        if (arguments[0] == VALID_COMMANDS[i])
+        if (arguments[0] == cli::VALID_COMMANDS[i])
         {
             return;
         }
@@ -67,18 +68,18 @@ void InputHandler::validateOutputRedirectOccurrenceAndPosition(const std::vector
 
             if (occurences > 1)
             {
-                throw std::invalid_argument(Errors::MANY_OUTPUT_REDIRECTION_OPERATORS);
+                throw std::invalid_argument(errors::MANY_OUTPUT_REDIRECTION_OPERATORS);
             }
             if (arguments.size() - i > 2)
             {
-                throw std::invalid_argument(Errors::MANY_ARGS_POST_OUTPUT_REDIRECTION_OPERATOR);
+                throw std::invalid_argument(errors::MANY_ARGS_POST_OUTPUT_REDIRECTION_OPERATOR);
             }
         }
     }
 
     if (occurences == 1 && arguments[0] != "cat")
     {
-        std::string error = arguments[0] + Errors::COMMAND_WITHOUT_OUTPUT_REDIRECTION;
+        std::string error = arguments[0] + errors::COMMAND_WITHOUT_OUTPUT_REDIRECTION;
         throw std::invalid_argument(error);
     }
 }

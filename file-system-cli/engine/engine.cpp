@@ -5,6 +5,7 @@
 #include "../../file-system-domain/file-management/file_service.hpp"
 #include "../../file-system-utils/error_constants.hpp"
 #include "../input-handling/input_handler.hpp"
+#include "../utils/cli_constants.hpp"
 
 Engine::Engine()
 {
@@ -38,9 +39,9 @@ void Engine::run()
 }
 int Engine::getCommandId(const std::string &command)
 {
-    for (int i = 0; i < NUM_OF_VALID_COMMANDS; i++)
+    for (int i = 0; i < cli::NUM_OF_VALID_COMMANDS; i++)
     {
-        if (command == VALID_COMMANDS[i])
+        if (command == cli::VALID_COMMANDS[i])
         {
             return i;
         }
@@ -109,7 +110,7 @@ void Engine::resolveInput(std::vector<std::string> &inputArguments)
         break;
     }
     default:
-        std::cerr << inputArguments[0] + Errors::INVALID_COMMAND;
+        std::cerr << inputArguments[0] + errors::INVALID_COMMAND;
     }
 }
 
@@ -122,7 +123,7 @@ void Engine::changeDirectory(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() != 2)
     {
-        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
+        std::cerr << inputArguments[0] + errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
 
@@ -153,7 +154,7 @@ void Engine::listFiles(std::vector<std::string> &inputArguments)
 
     if (inputArguments.size() != 2)
     {
-        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
+        std::cerr << inputArguments[0] + errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
 
@@ -215,7 +216,7 @@ void Engine::copyFiles(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() < 3)
     {
-        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
+        std::cerr << inputArguments[0] + errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
     // remove 'cp' command argument
@@ -283,7 +284,7 @@ void Engine::makeSymbolicLink(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() != 3)
     {
-        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
+        std::cerr << inputArguments[0] + errors::INVALID_NUMBER_OF_ARGUMENTS;
         return;
     }
 

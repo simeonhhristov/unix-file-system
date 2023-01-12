@@ -31,7 +31,7 @@ std::string FileService::changeDirectory(const std::string &path)
 
     if (!result)
     {
-        std::string error = path + Errors::DIRECTORY_DOES_NOT_EXIST;
+        std::string error = path + errors::DIRECTORY_DOES_NOT_EXIST;
         throw std::invalid_argument(error);
     }
 
@@ -47,7 +47,7 @@ std::string FileService::getContentsList(const std::string &path) const
 
     if (!target)
     {
-        std::string error = path + Errors::DIRECTORY_DOES_NOT_EXIST;
+        std::string error = path + errors::DIRECTORY_DOES_NOT_EXIST;
         throw std::invalid_argument(error);
     }
 
@@ -60,7 +60,7 @@ void FileService::concatenate(const std::vector<std::string> &filePaths, const s
 {
     if (repository->find(currentDirectory, destinationFile))
     {
-        std::string error = destinationFile + Errors::FILE_ALREADY_EXISTS;
+        std::string error = destinationFile + errors::FILE_ALREADY_EXISTS;
         throw std::invalid_argument(error);
     }
 
@@ -72,7 +72,7 @@ void FileService::createOrdinaryFile(const std::string &content, const std::stri
 {
     if (destinationFile.size() == 0)
     {
-        throw std::invalid_argument(Errors::NOT_SPECIFIED_FILE);
+        throw std::invalid_argument(errors::NOT_SPECIFIED_FILE);
     }
     repository->addFile(currentDirectory, content, destinationFile, FileType::File);
 }
@@ -85,7 +85,7 @@ std::string FileService::getConcatenatedContents(const std::vector<std::string> 
         File *target = repository->find(currentDirectory, filePaths[i]);
         if (!target)
         {
-            std::string error = filePaths[i] + Errors::FILE_DOES_NOT_EXIST;
+            std::string error = filePaths[i] + errors::FILE_DOES_NOT_EXIST;
             throw std::invalid_argument(error);
         }
 
@@ -97,7 +97,7 @@ std::string FileService::getConcatenatedContents(const std::vector<std::string> 
         OrdinaryFile *currentFile = dynamic_cast<OrdinaryFile *>(target);
         if (!currentFile)
         {
-            std::string error = filePaths[i] + Errors::FILE_NOT_ORDINARY;
+            std::string error = filePaths[i] + errors::FILE_NOT_ORDINARY;
             throw std::invalid_argument(error);
         }
         
@@ -111,7 +111,7 @@ void FileService::copyFiles(const std::vector<std::string> &filePaths, const std
 {
     if (destinationPath.size() == 0)
     {
-        throw std::invalid_argument(Errors::NOT_SPECIFIED_DESTINATION);
+        throw std::invalid_argument(errors::NOT_SPECIFIED_DESTINATION);
     }
 
     for (int i = 0; i < filePaths.size(); i++)
@@ -133,7 +133,7 @@ void FileService::removeFile(const std::string &filePath)
     File *target = repository->find(currentDirectory, filePath);
     if (!target)
     {
-        std::string error = filePath + Errors::FILE_DOES_NOT_EXIST;
+        std::string error = filePath + errors::FILE_DOES_NOT_EXIST;
         throw std::invalid_argument(error);
     }
 
@@ -141,7 +141,7 @@ void FileService::removeFile(const std::string &filePath)
     Directory *targetDirectory = dynamic_cast<Directory *>(target);
     if (targetDirectory)
     {
-        std::string error = filePath + Errors::FILE_IS_DIRECTORY;
+        std::string error = filePath + errors::FILE_IS_DIRECTORY;
         throw std::invalid_argument(error);
     }
 
@@ -154,7 +154,7 @@ void FileService::makeDirectory(const std::string &filePath)
 {
     if (filePath.size() == 0)
     {
-        std::string error = filePath + Errors::INVALID_PATH;
+        std::string error = filePath + errors::INVALID_PATH;
         throw std::invalid_argument(error);
     }
 
@@ -167,7 +167,7 @@ void FileService::removeDirectory(const std::string &filePath)
     File *target = repository->find(currentDirectory, filePath);
     if (!target)
     {
-        std::string error = filePath + Errors::DIRECTORY_DOES_NOT_EXIST;
+        std::string error = filePath + errors::DIRECTORY_DOES_NOT_EXIST;
         throw std::invalid_argument(error);
     }
 
@@ -175,19 +175,19 @@ void FileService::removeDirectory(const std::string &filePath)
     Directory *targetDirectory = dynamic_cast<Directory *>(target);
     if (!targetDirectory)
     {
-        std::string error = filePath + Errors::FILE_NOT_DIRECTORY;
+        std::string error = filePath + errors::FILE_NOT_DIRECTORY;
         throw std::invalid_argument(error);
     }
 
     // can't delete current directory
     if (currentDirectory == targetDirectory)
     {
-        throw std::invalid_argument(Errors::CANT_DELETE_CURRENT_DIR);
+        throw std::invalid_argument(errors::CANT_DELETE_CURRENT_DIR);
     }
 
     if (targetDirectory->getSubFiles().size() > 0)
     {
-        std::string error = filePath + Errors::DIR_IS_NOT_EMPTY;
+        std::string error = filePath + errors::DIR_IS_NOT_EMPTY;
         throw std::invalid_argument(error);
     }
 
@@ -212,7 +212,7 @@ void FileService::makeSymbolicLink(const std::string &targetPath, const std::str
     File *fileTarget = repository->find(currentDirectory, fileToLink);
     if (fileTarget && fileTarget->getMetaData().fileType == FileType::Directory)
     {
-        std::string error = targetPath + Errors::FILE_IS_DIRECTORY;
+        std::string error = targetPath + errors::FILE_IS_DIRECTORY;
         throw std::invalid_argument(error);
     }
 
@@ -228,17 +228,17 @@ std::string FileService::getStat(const std::string &path) const
     File *target = repository->find(currentDirectory, path);
     if (!target)
     {
-        throw std::invalid_argument(Errors::NO_SUCH_FILE_OR_DIR);
+        throw std::invalid_argument(errors::NO_SUCH_FILE_OR_DIR);
     }
 
     // no meta data update should be invoced from stat
     MetaData data = target->getMetaData();
     std::string result;
     result += "Size: " + std::to_string(data.fileSize);
-    result += ", Type: " + MetaDataConvert::convertFileTypeToString(data.fileType);
-    result += ", Last Modification: " + MetaDataConvert::convertUnixTimeStampToString(data.lastContentModificationDate);
-    result += ", Last Access: " + MetaDataConvert::convertUnixTimeStampToString(data.lastAccessDate);
-    result += ", Last Meta Data Modification: " + MetaDataConvert::convertUnixTimeStampToString(data.lastMetaDataModificationDate);
+    result += ", Type: " + metadata_convert::convertFileTypeToString(data.fileType);
+    result += ", Last Modification: " + metadata_convert::convertUnixTimeStampToString(data.lastContentModificationDate);
+    result += ", Last Access: " + metadata_convert::convertUnixTimeStampToString(data.lastAccessDate);
+    result += ", Last Meta Data Modification: " + metadata_convert::convertUnixTimeStampToString(data.lastMetaDataModificationDate);
     result += ", SerialNo.:" + std::to_string(data.serialNumber);
 
     return result;

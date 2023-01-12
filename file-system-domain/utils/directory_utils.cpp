@@ -219,7 +219,7 @@ void DirectoryUtils::createDirectory(Directory *startingDirectory, const std::st
     Directory *target = traverseDirectories(startingDirectory, pathSegments);
     if (target)
     {
-        std::string error = target->getName() + Errors::DIRECTORY_ALREADY_EXISTS;
+        std::string error = target->getName() + errors::DIRECTORY_ALREADY_EXISTS;
         throw std::invalid_argument(error);
     }
     traverseAndCreateDirectories(startingDirectory, pathSegments);
@@ -239,7 +239,7 @@ void DirectoryUtils::createFile(Directory *startingDirectory, const std::string 
     File *target = findFile(fileLocation, fileName);
     if (target)
     {
-        std::string error = stringUtils.getLastAfter(fileName, "/") + Errors::FILE_ALREADY_EXISTS;
+        std::string error = stringUtils.getLastAfter(fileName, "/") + errors::FILE_ALREADY_EXISTS;
         throw std::invalid_argument(error);
     }
 
@@ -266,7 +266,7 @@ OrdinaryFile *DirectoryUtils::getFileFromSymLink(Directory *startingDirectory, c
     File *target = findFile(startingDirectory, path);
     if (!target)
     {
-        std::string error = stringUtils.getLastAfter(path, "/") + Errors::FILE_IS_DIRECTORY;
+        std::string error = stringUtils.getLastAfter(path, "/") + errors::FILE_IS_DIRECTORY;
         throw std::invalid_argument(error);
     }
 
@@ -277,7 +277,7 @@ OrdinaryFile *DirectoryUtils::getFileFromSymLink(Directory *startingDirectory, c
     }
     if (target->getMetaData().fileType == FileType::Directory)
     {
-        std::string error = target->getName() + Errors::FILE_IS_DIRECTORY;
+        std::string error = target->getName() + errors::FILE_IS_DIRECTORY;
         throw std::invalid_argument(error);
     }
     SymbolicLink *reachedTarget = dynamic_cast<SymbolicLink *>(target);

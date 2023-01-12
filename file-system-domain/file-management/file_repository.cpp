@@ -24,7 +24,7 @@ void FileRepository::addDirectory(Directory *startingDirectory, const std::strin
     // guard for existing file
     if (find(startingDirectory, filePath))
     {
-        std::string error = filePath + Errors::DIRECTORY_ALREADY_EXISTS;
+        std::string error = filePath + errors::DIRECTORY_ALREADY_EXISTS;
         throw std::invalid_argument(error);
     }
 
@@ -36,7 +36,7 @@ void FileRepository::addFile(Directory *startingDirectory, const std::string &da
 {
     if (find(startingDirectory, filePath))
     {
-        std::string error = filePath + Errors::FILE_ALREADY_EXISTS;
+        std::string error = filePath + errors::FILE_ALREADY_EXISTS;
         throw std::invalid_argument(error);
     }
 
@@ -49,13 +49,13 @@ void FileRepository::copyFile(Directory *startingDirectory, const std::string &f
     File *target = find(startingDirectory, fileToCopy);
     if (!target)
     {
-        std::string error = fileToCopy + Errors::FILE_DOES_NOT_EXIST;
+        std::string error = fileToCopy + errors::FILE_DOES_NOT_EXIST;
         throw std::invalid_argument(error);
     }
 
     if (target->getMetaData().fileType == FileType::Directory)
     {
-        std::string error = fileToCopy + Errors::FILE_IS_DIRECTORY;
+        std::string error = fileToCopy + errors::FILE_IS_DIRECTORY;
         throw std::invalid_argument(error);
     }
 
@@ -69,7 +69,7 @@ void FileRepository::copyFile(Directory *startingDirectory, const std::string &f
     Directory *destination = directoryUtils.findDirectory(startingDirectory, destinationPath);
     if (!destination)
     {
-        std::string error = destinationPath + Errors::DIRECTORY_DOES_NOT_EXIST;
+        std::string error = destinationPath + errors::DIRECTORY_DOES_NOT_EXIST;
         throw std::runtime_error(error);
     }
 
@@ -108,7 +108,7 @@ void FileRepository::remove(const std::string filePath)
 {
     if (!find(nullptr, filePath))
     {
-        std::string error = filePath + Errors::FILE_DOES_NOT_EXIST;
+        std::string error = filePath + errors::FILE_DOES_NOT_EXIST;
         throw std::invalid_argument(error);
     }
 
