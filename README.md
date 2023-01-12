@@ -23,6 +23,7 @@ $ start generated_file_name.exe
 * `file-system-domain` - Модул съдържащ основната логика на програмата. 
 * `file-system-cli` - Модул отговарящ за обработването на подадените команди и подаването им до `file-system-domain`, отговаря също и за визуализиране на съобщения до потребителя.
 * `file-system-utils` - Модул съдържащ помощни инструменти използвани от другите два модула.
+<br />
 
 ### `file-system-domain`
 Модулът е разделен на 4 папки, `enums`, `file-management`, `model`, `utils`.
@@ -34,6 +35,7 @@ $ start generated_file_name.exe
 
 #### `file-management`
 Основните класове отговорни за логиката в приложението са `FileFactory`, `FileRepository`, `FileService`.
+<br />
 
 * `FileFactory`
 Клас отговорен за създаване на 'модели' по време на изпълнение на програмата.
@@ -46,6 +48,8 @@ public:
     SymbolicLink *createSymbolicLink(const std::string &name, const std::string &filePath, Directory *parent);
 };
 ```
+<br />
+
 * `FileRepository`
 Клас от ниския слой, отговорен за ***съхранение***, ***вмъкване***, ***махане***, ***промяна*** и ***намиране*** на данни.
 ```
@@ -64,6 +68,7 @@ public:
     Directory *getRoot();
 };
 ```
+<br />
 
 * `FileService`
 Клас от средния слой в който се инжектира `FileRepository`, отговорен за по-сложната бизнес логика и сигнализиране за проблеми.
@@ -91,12 +96,14 @@ public:
     std::string getStat(const std::string &path) const;                                              // stat
 };
 ```
+<br />
 
 #### `model`
 Класовете отговорни за съхраняване и преставяне на данни са `MetaData`, 
 `File`, `Directory`, `OrdinaryFile` и `SymbolicLink`.
+<br />
 
-* `MetaData`- структура за организация на **метаданните** за един файл.
+* `MetaData` структура за организация на **метаданните** за един файл.
 ```
 struct MetaData
 {
@@ -108,6 +115,7 @@ struct MetaData
     unsigned lastMetaDataModificationDate;
 };
 ```
+<br />
 
 * `File`
 Базов клас представляващ общите черти на всеки файл.
@@ -132,6 +140,7 @@ public:
     void updateLastMetaDataModificationDate(); 
 };
 ```
+<br />
 
 * `Directory`
 Модел наследяващ `File` който има способността да съхранява в себе си други модели наследници на `File`.
@@ -152,6 +161,7 @@ public:
     virtual void updateSize();
 };
 ```
+<br />
 
 * `OrdinaryFile`
 Модел наследяващ `File` който има способността да съхранява в себе си информация под формата на текст.
@@ -168,6 +178,7 @@ public:
     virtual void updateSize();
 };
 ```
+<br />
 
 * `SymbolicLink`
 Модел наследяващ `File` представляващ символна връзка към модел от тип `OrdinaryFile` позволяващ бърз достъп от всяко място във файловата система до файла към който е връзката.
@@ -184,9 +195,11 @@ public:
     virtual void updateSize();
 };
 ```
+<br />
 
 #### `utils`
 Класовете имащи роля на помощни инструменти са `DirectoryUtils`, `IdGenerator`.
+<br />
 
 * `DirectoryUtils`
 Клас предоставящ инструменти за обхождане на директории, намиране и създаване на файлове.
@@ -212,6 +225,7 @@ public:
     std::string createFileCopyName(Directory *targetDirectory, const std::string fileName);
 };
 ```
+<br />
 
 * `IdGenerator`
 Клас с една инстанция, използван за номериране на файлове в системата.
@@ -230,6 +244,8 @@ private:
     IdGenerator();
 };
 ```
+<br />
+<br />
 
 ### `file-system-cli`
 Модулът е разделен на 3 папки `engine`, `input-handling`, `utils`.
@@ -237,6 +253,7 @@ private:
 * `engine` - Основната логика свързана с обработване на входни данни и изпращане до `FileService` класът.
 * `input-handling` - Грижи се за причитане и валидиране на данни въведени от потребителя.
 * `utils` - Константи използвани от останалата част на модула.
+<br />
 
 #### `engine`
 Съдържа класът `Engine` (най-горния слой). Той е отговорен за стартирането на програмата и  обработването на грешки от `FileService` и `InputHandler`.
@@ -282,6 +299,7 @@ private:
     };
 };
 ```
+<br />
 
 #### `input-handling`
 Съдържа `InputHandler` отговорен за прочитане и валидиране на входни данни от потребителя.
@@ -301,6 +319,7 @@ public:
     std::string readInputForNewFile();
 };
 ```
+<br />
 
 #### `utils`
 Съдържа `cli_constants`, `namespace` от константи използвани във `file-system-cli`.
@@ -311,9 +330,12 @@ namespace cli {
     const char INVALID_CHARACTERS[] = {'\\', '|', '`', '>'};
 }
 ```
+<br />
+<br />
 
 ### `file-system-cli`
 Модулът съдържа `errors`, `meta_data_convert` и `StringUtils`.
+<br />
 
 #### `errors`
 `namespace` от константи използвани във `file-system-cli`  и `file-system-cli`.
@@ -346,6 +368,7 @@ namespace errors {
 }
 
 ```
+<br />
 
 #### `meta_data_convert`
 `namespace` с помощни функции за представяне на мета данни в по-удобен за четене формат
@@ -356,6 +379,7 @@ namespace metadata_convert {
     std::string convertUnixTimeStampToString(long timestamp);
 }
 ```
+<br />
 
 #### `StringUtils`
 Клас с помощни фунцкии за по-често срещаните и необходими операции със `std::string`
