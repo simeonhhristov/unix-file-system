@@ -15,7 +15,7 @@ private:
     Directory *currentDirectory;
     DirectoryUtils directoryUtils;
     StringUtils stringUtils;
-    
+
 public:
     FileService();
     FileService(const FileService &other) = delete;
@@ -24,10 +24,10 @@ public:
 
     std::string getWorkingDirectory() const;                                                         // pwd
     std::string changeDirectory(const std::string &path);                                            // cd
-    std::vector<std::string> getContentsList(const std::string &path) const;                         // ls
+    std::string getContentsList(const std::string &path) const;                                      // ls
     void concatenate(const std::vector<std::string> &filePaths, const std::string &destinationFile); // cat
     void createOrdinaryFile(const std::string &content, const std::string &destinationFile);         // cat (touch)
-    std::string getConcatenatedContents(const std::vector<std::string> &filePaths);
+    std::string getConcatenatedContents(const std::vector<std::string> &filePaths);                  // cat
     void copyFiles(const std::vector<std::string> &filePaths, const std::string &destinationPath);   // cp
     void removeFile(const std::string &filePath);                                                    // rm
     void makeDirectory(const std::string &filePath);                                                 // mkdir

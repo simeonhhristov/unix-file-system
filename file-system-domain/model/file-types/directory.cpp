@@ -71,6 +71,8 @@ void Directory::addFile(File *file)
         }
     }
     subFiles.push_back(file);
+    updateSize();
+    updateLastContentModificationDate();
 }
 
 void Directory::removeFile(const std::string &name)
@@ -83,6 +85,8 @@ void Directory::removeFile(const std::string &name)
             break;
         }
     }
+    updateSize();
+    updateLastContentModificationDate();
 }
 
 Directory *Directory::getParent() const
@@ -104,4 +108,21 @@ const std::string Directory::getContent() const
     }
 
     return result;
+}
+
+void Directory::updateSize()
+{
+    int newSize = 0;
+    for (size_t i = 0; i < subFiles.size(); i++)
+    {
+        newSize += subFiles[i]->getMetaData().fileSize;
+    }
+    metaData.fileSize = newSize;
+    updateLastMetaDataModificationDate();
+
+    // recursively update all predecessors' size
+    if (parent)
+    {
+       parent->updateSize();
+    }
 }

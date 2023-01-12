@@ -27,3 +27,20 @@ const MetaData File::getMetaData() const
 {
     return metaData;
 }
+
+void File::updateLastAccesDate()
+{
+    metaData.lastAccessDate = std::time(nullptr);
+    updateLastMetaDataModificationDate();
+}
+
+void File::updateLastContentModificationDate()
+{
+    metaData.lastContentModificationDate = std::time(nullptr);
+    updateLastMetaDataModificationDate();
+}
+
+void File::updateLastMetaDataModificationDate()
+{
+    metaData.lastMetaDataModificationDate = std::time(nullptr);
+}

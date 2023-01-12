@@ -21,4 +21,5 @@ public:
     const std::vector<File *> &getSubFiles() const;
     Directory *getParent() const;
     virtual const std::string getContent() const;
+    virtual void updateSize();
 };

@@ -36,13 +36,14 @@ std::string FileService::changeDirectory(const std::string &path)
     }
 
     currentDirectory = result;
+    currentDirectory->updateLastAccesDate();
     return result->getName();
 }
 
-std::vector<std::string> FileService::getContentsList(const std::string &path) const
+std::string FileService::getContentsList(const std::string &path) const
 {
     Directory *target = directoryUtils.findDirectory(currentDirectory, path);
-    std::vector<std::string> result;
+    std::string result;
 
     if (!target)
     {
@@ -50,12 +51,8 @@ std::vector<std::string> FileService::getContentsList(const std::string &path) c
         throw std::invalid_argument(error);
     }
 
-    std::vector<File *> subFiles = target->getSubFiles();
-    for (int i = 0; i < subFiles.size(); i++)
-    {
-        result.push_back(subFiles[i]->getName());
-    }
-
+    target->updateLastAccesDate();
+    result = target->getContent();
     return result;
 }
 
@@ -103,7 +100,8 @@ std::string FileService::getConcatenatedContents(const std::vector<std::string> 
             std::string error = filePaths[i] + Errors::FILE_NOT_ORDINARY;
             throw std::invalid_argument(error);
         }
-
+        
+        currentFile->updateLastAccesDate();
         combinedContent += currentFile->getContent();
     }
     return combinedContent;
@@ -233,6 +231,7 @@ std::string FileService::getStat(const std::string &path) const
         throw std::invalid_argument(Errors::NO_SUCH_FILE_OR_DIR);
     }
 
+    // no meta data update should be invoced from stat
     MetaData data = target->getMetaData();
     std::string result;
     result += "Size: " + std::to_string(data.fileSize);

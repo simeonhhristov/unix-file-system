@@ -5,17 +5,15 @@ SymbolicLink::SymbolicLink(const std::string &name, const std::string &filePath,
 {
     this->parent = parent;
     this->filePath = filePath;
+    metaData.fileSize = filePath.size();
     parent->addFile(this);
 }
+
 SymbolicLink::SymbolicLink(const SymbolicLink &other, Directory *parent) : File(other)
 {
     this->parent = parent == nullptr ? other.parent : parent;
     filePath = other.filePath;
     parent->addFile(this);
-}
-
-void SymbolicLink::changeLink(const std::string &newPath)
-{
 }
 
 Directory *SymbolicLink::getParent() const
@@ -26,4 +24,11 @@ Directory *SymbolicLink::getParent() const
 const std::string SymbolicLink::getContent() const
 {
     return filePath;
+}
+
+void SymbolicLink::updateSize()
+{
+    metaData.fileSize = filePath.size();
+    updateLastMetaDataModificationDate();
+    parent->updateSize();
 }

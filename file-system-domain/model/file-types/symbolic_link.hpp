@@ -13,7 +13,7 @@ public:
     SymbolicLink(const std::string &name, const std::string &filePath, Directory *Parent);
     SymbolicLink(const SymbolicLink &other, Directory *parent = nullptr);
     SymbolicLink(const SymbolicLink &other) = delete;
-    void changeLink(const std::string &newPath);
     Directory *getParent() const;
     virtual const std::string getContent() const;
+    virtual void updateSize();
 };

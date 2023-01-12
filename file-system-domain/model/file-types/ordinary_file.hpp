@@ -15,4 +15,5 @@ public:
     OrdinaryFile(const OrdinaryFile &other) = delete;
     Directory *getParent() const;
     virtual const std::string getContent() const;
+    virtual void updateSize();
 };

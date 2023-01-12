@@ -62,6 +62,7 @@ void FileRepository::copyFile(Directory *startingDirectory, const std::string &f
     DirectoryUtils directoryUtils = DirectoryUtils();
     if (target->getMetaData().fileType == FileType::Symlink)
     {
+        target->updateLastAccesDate();
         target = directoryUtils.getFileFromSymLink(startingDirectory, target->getContent());
     }
 
@@ -82,7 +83,8 @@ void FileRepository::copyFile(Directory *startingDirectory, const std::string &f
             return;
         }
     }
-
+    
+    target->updateLastAccesDate();
     addFile(destination, target->getContent(), target->getName(), target->getMetaData().fileType);
 }
 

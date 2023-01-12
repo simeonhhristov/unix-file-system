@@ -157,7 +157,7 @@ void Engine::listFiles(std::vector<std::string> &inputArguments)
         return;
     }
 
-    std::vector<std::string> result;
+    std::string result;
     try
     {
         result = fileService->getContentsList(inputArguments[1]);
@@ -167,12 +167,7 @@ void Engine::listFiles(std::vector<std::string> &inputArguments)
         std::cerr << e.what() << "\n";
         result = fileService->getContentsList(".");
     }
-
-    for (size_t i = 0; i < result.size(); i++)
-    {
-        std::cout << result[i] << " ";
-    }
-    std::cout << "\n";
+    std::cout << result << "\n";
 }
 
 void Engine::concatenateFiles(std::vector<std::string> &inputArguments)
@@ -306,8 +301,7 @@ void Engine::printStat(std::vector<std::string> &inputArguments)
 {
     if (inputArguments.size() == 1)
     {
-        std::cerr << inputArguments[0] + Errors::INVALID_NUMBER_OF_ARGUMENTS;
-        return;
+        inputArguments.push_back(".");
     }
 
     for (size_t i = 1; i < inputArguments.size(); i++)

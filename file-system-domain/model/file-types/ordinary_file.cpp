@@ -5,6 +5,7 @@ OrdinaryFile::OrdinaryFile(const std::string &name, const std::string &content, 
 {
     this->parent = parent;
     this->content = content;
+    metaData.fileSize = content.size();
     parent->addFile(this);
 }
 
@@ -23,4 +24,11 @@ Directory *OrdinaryFile::getParent() const
 const std::string OrdinaryFile::getContent() const
 {
     return content;
+}
+
+void OrdinaryFile::updateSize()
+{
+    metaData.fileSize = content.size();
+    updateLastMetaDataModificationDate();
+    parent->updateSize();
 }

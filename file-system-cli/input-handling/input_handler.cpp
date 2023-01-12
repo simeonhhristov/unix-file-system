@@ -111,10 +111,11 @@ std::string InputHandler::readInputForNewFile()
     while (currentLine != "." && !std::cin.eof())
     {
         std::getline(std::cin, currentLine);
-        result += '\n' + currentLine;
+        result += currentLine + '\n';
     }
 
     // remove the interupt input character '.'
-    result.pop_back();
+    // remove the 2 new line characters '\n'
+    result = result.substr(0, result.size() - 3);
     return result;
 }

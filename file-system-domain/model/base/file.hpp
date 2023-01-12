@@ -18,4 +18,9 @@ public:
     virtual const std::string getContent() const = 0;
     virtual File *getParent() const = 0;
     virtual ~File() = default;
+
+    virtual void updateSize() = 0;
+    void updateLastAccesDate();
+    void updateLastContentModificationDate();
+    void updateLastMetaDataModificationDate(); 
 };
