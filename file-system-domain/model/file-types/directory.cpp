@@ -14,37 +14,6 @@ Directory::Directory(const std::string &name, Directory *parent) : File(name, Fi
     }
 }
 
-Directory::Directory(const Directory &other, Directory *parent) : File(other)
-{
-    this->parent = (parent == nullptr) ? other.parent : parent;
-    name = (parent == nullptr) ? name : other.name;
-
-    for (int i = 0; i < other.subFiles.size(); i++)
-    {
-        switch (other.subFiles[i]->getMetaData().fileType)
-        {
-        case FileType::Directory:
-        {
-            Directory *newDirectory = new Directory(*dynamic_cast<Directory *>(other.subFiles[i]), this);
-            subFiles.push_back(newDirectory);
-            break;
-        }
-        case FileType::File:
-        {
-            OrdinaryFile *newFile = new OrdinaryFile(*dynamic_cast<OrdinaryFile *>(other.subFiles[i]), this);
-            subFiles.push_back(newFile);
-            break;
-        }
-        case FileType::Symlink:
-        {
-            SymbolicLink *newLink = new SymbolicLink(*dynamic_cast<SymbolicLink *>(other.subFiles[i]), this);
-            subFiles.push_back(newLink);
-            break;
-        }
-        }
-    }
-}
-
 Directory::~Directory()
 {
     for (int i = 0; i < subFiles.size(); i++)

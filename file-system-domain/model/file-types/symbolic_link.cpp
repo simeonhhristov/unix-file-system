@@ -9,13 +9,6 @@ SymbolicLink::SymbolicLink(const std::string &name, const std::string &filePath,
     parent->addFile(this);
 }
 
-SymbolicLink::SymbolicLink(const SymbolicLink &other, Directory *parent) : File(other)
-{
-    this->parent = parent == nullptr ? other.parent : parent;
-    filePath = other.filePath;
-    parent->addFile(this);
-}
-
 Directory *SymbolicLink::getParent() const
 {
     return parent;

@@ -11,7 +11,6 @@ private:
 
 public:
     Directory(const std::string &name, Directory *parent);
-    Directory(const Directory &other, Directory *parent = nullptr);
     Directory(const Directory &other) = delete;
     Directory &operator=(const Directory &other) = delete;
     ~Directory();
