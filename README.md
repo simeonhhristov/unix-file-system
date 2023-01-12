@@ -402,7 +402,7 @@ public:
 <br />
 
 ## Демонстрация на използване
-```console
+```bash
 unix-file-system $ make build
 unix-file-system $ ./a.out
 / $ pwd
