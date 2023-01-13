@@ -345,7 +345,7 @@ namespace cli {
 <br />
 
 #### `errors`
-`namespace` от константи използвани във `file-system-cli`  и `file-system-cli`.
+`namespace` от константи използвани във `file-system-cli`  и `file-system-domain`.
 
 ```c++
 namespace errors {
@@ -402,6 +402,7 @@ public:
 <br />
 
 ## Демонстрация на използване
+
 ```console
 unix-file-system $ make build
 unix-file-system $ ./a.out
