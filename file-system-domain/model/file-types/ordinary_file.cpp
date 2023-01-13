@@ -1,5 +1,8 @@
 #include <string>
+#include "directory.hpp"
 #include "ordinary_file.hpp"
+#include "../base/file.hpp"
+#include "../../enums/file_type.cpp"
 
 OrdinaryFile::OrdinaryFile(const std::string &name, const std::string &content, Directory *parent) : File(name, FileType::File)
 {

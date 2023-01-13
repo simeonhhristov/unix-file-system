@@ -1,10 +1,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "input_handler.hpp"
+
 #include "../../file-system-utils/string_utils.hpp"
 #include "../../file-system-utils/error_constants.hpp"
 #include "../utils/cli_constants.hpp"
-#include "input_handler.hpp"
 
 InputHandler::InputHandler()
 {

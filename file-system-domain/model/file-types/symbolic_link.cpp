@@ -1,5 +1,8 @@
 #include <string>
+#include "../base/file.hpp"
+#include "directory.hpp"
 #include "symbolic_link.hpp"
+#include "../../enums/file_type.cpp"
 
 SymbolicLink::SymbolicLink(const std::string &name, const std::string &filePath, Directory *parent) : File(name, FileType::Symlink)
 {

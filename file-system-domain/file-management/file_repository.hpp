@@ -1,8 +1,8 @@
 #pragma once
-#include "../model/file-types/directory.hpp"
-#include "../model/file-types/ordinary_file.hpp"
-#include "../model/file-types/symbolic_link.hpp"
 #include "file_factory.hpp"
+#include "../enums/file_type.cpp"
+#include "../model/file-types/directory.hpp"
+#include "../model/base/file.hpp"
 
 class FileRepository
 {

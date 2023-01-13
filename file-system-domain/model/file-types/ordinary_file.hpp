@@ -2,6 +2,7 @@
 #include <string>
 #include "../base/file.hpp"
 #include "directory.hpp"
+#include "../../enums/file_type.cpp"
 
 class OrdinaryFile : public File
 {

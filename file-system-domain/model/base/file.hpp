@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "meta_data.cpp"
+#include "../../enums/file_type.cpp"
 
 class File
 {

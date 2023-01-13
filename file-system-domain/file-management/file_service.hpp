@@ -1,12 +1,10 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "../model/file-types/directory.hpp"
-#include "../model/file-types/ordinary_file.hpp"
-#include "../model/file-types/symbolic_link.hpp"
+#include "file_repository.hpp"
 #include "../utils/directory_utils.hpp"
 #include "../../file-system-utils/string_utils.hpp"
-#include "file_repository.hpp"
+#include "../model/file-types/directory.hpp"
 
 class FileService
 {

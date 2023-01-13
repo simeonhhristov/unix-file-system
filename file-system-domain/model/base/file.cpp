@@ -1,5 +1,6 @@
 #include "file.hpp"
 #include "meta_data.cpp"
+#include "../../enums/file_type.cpp"
 
 File::File(const std::string &_name, FileType fileType) : name(_name), metaData(fileType)
 {

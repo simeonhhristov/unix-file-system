@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "../base/file.hpp"
+#include "../../enums/file_type.cpp"
 
 class Directory : public File
 {

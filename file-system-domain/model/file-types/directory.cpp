@@ -3,6 +3,8 @@
 #include "directory.hpp"
 #include "ordinary_file.hpp"
 #include "symbolic_link.hpp"
+#include "../base/file.hpp"
+#include "../../enums/file_type.cpp"
 
 Directory::Directory(const std::string &name, Directory *parent) : File(name, FileType::Directory)
 {

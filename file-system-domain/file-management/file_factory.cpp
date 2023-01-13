@@ -1,4 +1,7 @@
 #include "file_factory.hpp"
+#include "../model/file-types/directory.hpp"
+#include "../model/file-types/ordinary_file.hpp"
+#include "../model/file-types/symbolic_link.hpp"
 
 Directory *FileFactory::createDirectory(const std::string &name, Directory *parent)
 {

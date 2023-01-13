@@ -2,9 +2,11 @@
 #include <string>
 #include <vector>
 #include "engine.hpp"
+
 #include "../../file-system-domain/file-management/file_service.hpp"
-#include "../../file-system-utils/error_constants.hpp"
 #include "../input-handling/input_handler.hpp"
+
+#include "../../file-system-utils/error_constants.hpp"
 #include "../utils/cli_constants.hpp"
 
 Engine::Engine()

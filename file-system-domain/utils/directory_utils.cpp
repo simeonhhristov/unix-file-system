@@ -1,8 +1,15 @@
 #include <string>
 #include <vector>
-#include "directory_utils.hpp"
+#include "../file-management/file_factory.hpp"
+
+#include "../model/base/file.hpp"
+#include "../model/file-types/directory.hpp"
+#include "../model/file-types/ordinary_file.hpp"
+#include "../model/file-types/symbolic_link.hpp"
+
 #include "../../file-system-utils/error_constants.hpp"
 #include "../../file-system-utils/string_utils.hpp"
+#include "directory_utils.hpp"
 
 DirectoryUtils::DirectoryUtils()
 {

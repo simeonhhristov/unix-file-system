@@ -1,6 +1,12 @@
+#include <string>
+#include <vector>
+#include "file_factory.hpp"
 #include "file_repository.hpp"
+
 #include "../utils/directory_utils.hpp"
 #include "../../file-system-utils/error_constants.hpp"
+#include "../enums/file_type.cpp"
+#include "../model/file-types/directory.hpp"
 
 FileRepository::FileRepository()
 {

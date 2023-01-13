@@ -1,10 +1,18 @@
 #include <vector>
 #include <string>
-#include <iostream>
 #include "file_service.hpp"
+
+#include "../enums/file_type.cpp"
 #include "../../file-system-utils/error_constants.hpp"
 #include "../../file-system-utils/string_utils.hpp"
 #include "../../file-system-utils/meta_data_convert.hpp"
+
+#include "../model/base/file.hpp"
+#include "../model/file-types/directory.hpp"
+#include "../model/file-types/ordinary_file.hpp"
+#include "../model/file-types/symbolic_link.hpp"
+#include "../model/base/meta_data.cpp"
+
 
 FileService::FileService()
 {

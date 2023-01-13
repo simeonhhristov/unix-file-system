@@ -1,12 +1,10 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../file-management/file_factory.hpp"
+#include "../../file-system-utils/string_utils.hpp"
 #include "../model/base/file.hpp"
 #include "../model/file-types/directory.hpp"
 #include "../model/file-types/ordinary_file.hpp"
-#include "../model/file-types/symbolic_link.hpp"
-#include "../../file-system-utils/string_utils.hpp"
 
 class DirectoryUtils
 {
